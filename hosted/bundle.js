@@ -97,30 +97,30 @@ var DomoDeleteForm = function DomoDeleteForm(props) {
   }));
 };
 
-var DomoList = function DomoList(props) {
-  if (props.domos.length === 0) {
+var ItemList = function ItemList(props) {
+  if (props.items.length === 0) {
     return /*#__PURE__*/React.createElement("div", {
-      className: "domoList"
+      className: "itemList"
     }, /*#__PURE__*/React.createElement("h3", {
-      className: "emptyDomo"
-    }, "No Domos Yet"));
+      className: "emptyItemList"
+    }, "No Items Yet"));
   }
 
-  var domoNodes = props.domos.map(function (domo) {
+  var itemNodes = props.items.map(function (item) {
     return /*#__PURE__*/React.createElement("div", {
-      key: domo._id,
-      className: "domo"
+      key: item._id,
+      className: "item"
     }, /*#__PURE__*/React.createElement("img", {
-      src: "assets/img/domoface.jpeg",
-      alt: "domo face",
+      src: item.image,
+      alt: "item preview",
       className: "domoFace"
     }), /*#__PURE__*/React.createElement("h3", {
-      className: "domoName"
-    }, " Name: ", domo.name, " "), /*#__PURE__*/React.createElement("h3", {
-      className: "domoAge"
-    }, " Age: ", domo.age, " "), /*#__PURE__*/React.createElement("h3", {
-      className: "domoLevel"
-    }, " Level: ", domo.level, " "));
+      className: "itemName"
+    }, " Name: ", item.name, " "), /*#__PURE__*/React.createElement("h3", {
+      className: "itemPrice"
+    }, " Price: ", item.price, " "), /*#__PURE__*/React.createElement("button", {
+      className: "addButton"
+    }, " Add To Cart "));
   });
   return /*#__PURE__*/React.createElement("div", {
     className: "domoList"
@@ -142,9 +142,9 @@ var setup = function setup(csrf) {
   ReactDOM.render( /*#__PURE__*/React.createElement(DomoDeleteForm, {
     csrf: csrf
   }), document.querySelector("#deleteDomo"));
-  ReactDOM.render( /*#__PURE__*/React.createElement(DomoList, {
-    domos: []
-  }), document.querySelector("#domos"));
+  ReactDOM.render( /*#__PURE__*/React.createElement(ItemList, {
+    items: []
+  }), document.querySelector("#items"));
   loadDomosFromServer();
 };
 

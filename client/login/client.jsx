@@ -37,6 +37,16 @@ const handleSignup = (e) => {
 
 const LoginWindow = (props) => {
     return (
+
+        <div>
+        <div class="panel panel-primary panel-transparent">
+  <div class="panel-heading">
+    <h3 class="panel-title">Panel primary</h3>
+  </div>
+  <div class="panel-body">
+    Panel content
+  </div>
+</div>
         <form id="loginForm" name="loginForm"
         onSubmit={handleLogin}
         action="/login"
@@ -51,6 +61,7 @@ const LoginWindow = (props) => {
             <input className="formSubmit" type="submit" value="Sign In"/>
 
         </form>
+        </div>
     );
 };
 

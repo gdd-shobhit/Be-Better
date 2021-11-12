@@ -4,19 +4,90 @@ html, body {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
+    background-color: #111;
 }
 
-.banner {
-    height:100%;
+/* .banner {
+    height:80%;
     background-image: url('/assets/img/HeaderPicture.png');
+    max-width: 100%;
+    width: 90%;
+    position: relative;
+    top:-40%;
+    background-repeat: no-repeat;
+    
+} */
+
+/* Media Queries: Tablet Landscape */
+@media screen and (max-width: 1060px) {
+    #primary { width:67%; }
+    #secondary { width:30%; margin-left:3%;}  
+}
+
+/* Media Queries: Tabled Portrait */
+@media screen and (max-width: 768px) {
+    #primary { width:100%; }
+    #secondary { width:100%; margin:0; border:none; }
+}
+
+
+.headerImage {
+    max-width: 100%; 
+    height: auto;
+    position: relative;
+    background-repeat: no-repeat;
+    margin-top: -10%;
+
 }
 
 #logo {
     height: 40px;
-    width: 40;
+    width: 40px;
     padding-top: 5px;
     float:left;
     border-radius: 8px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: black(167, 157, 157);
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0;
+  }
+  
+  li {
+    float: left;
+  }
+  
+  li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+  
+  /* Change the link color to #111 (black) on hover */
+  li a:hover {
+    background-color: whitesmoke;
+    color: black;
+  }
+
+
+.panel-transparent {
+    background: none;
+}
+
+.panel-transparent .panel-heading{
+    background: rgba(122, 130, 136, 0.2)!important;
+}
+
+.panel-transparent .panel-body{
+    background: rgba(46, 51, 56, 0.2)!important;
 }
 
 nav {
@@ -37,6 +108,12 @@ nav:nth-child(1) {
     font-size: 1.3em;
     float: left;
 }
+
+.navlink {
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0;
+  }
 
 .navlink a, .navlink a:link, .navlink a:visited, .navlink a:hover, .navlink a:active {
     color: white;
@@ -140,7 +217,7 @@ nav:nth-child(1) {
     background-color: #338acc;
 }
 
-#user, #pass, #pass2 {
+#user, #pass, #pass2, #pass3 {
     text-align: center;
     font-size: 1.1em;
     width: 180px;

@@ -70,23 +70,23 @@ const DomoDeleteForm = (props) =>{
     );
 }
 
-const DomoList = function(props) {
-    if(props.domos.length === 0) {
+const ItemList = function(props) {
+    if(props.items.length === 0) {
         return (
-            <div className="domoList">
-                <h3 className="emptyDomo">No Domos Yet</h3>
+            <div className="itemList">
+                <h3 className="emptyItemList">No Items Yet</h3>
             </div>
         );
     }
 
-    const domoNodes = props.domos.map(function(domo) {
+    const itemNodes = props.items.map(function(item) {
         return (
-            <div key={domo._id} className="domo">
-                <img src="assets/img/domoface.jpeg" alt="domo face" className="domoFace" />
+            <div key={item._id} className="item">
+                <img src={item.image} alt="item preview" className="domoFace" />
                 {/* <button className="domoClose" onClick={handleDelete(domo._id)}>X</button> */}
-                <h3 className="domoName"> Name: {domo.name} </h3>
-                <h3 className="domoAge"> Age: {domo.age} </h3>
-                <h3 className="domoLevel"> Level: {domo.level} </h3>
+                <h3 className="itemName"> Name: {item.name} </h3>
+                <h3 className="itemPrice"> Price: {item.price} </h3>
+                <button className="addButton"> Add To Cart </button>
             </div>
         );
     });
@@ -118,7 +118,7 @@ const setup = function(csrf) {
     
     
     ReactDOM.render(
-        <DomoList domos={[]} />, document.querySelector("#domos")
+        <ItemList items={[]} />, document.querySelector("#items")
     );
 
     loadDomosFromServer();

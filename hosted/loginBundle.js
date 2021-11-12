@@ -37,7 +37,15 @@ var handleSignup = function handleSignup(e) {
 };
 
 var LoginWindow = function LoginWindow(props) {
-  return /*#__PURE__*/React.createElement("form", {
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    "class": "panel panel-primary panel-transparent"
+  }, /*#__PURE__*/React.createElement("div", {
+    "class": "panel-heading"
+  }, /*#__PURE__*/React.createElement("h3", {
+    "class": "panel-title"
+  }, "Panel primary")), /*#__PURE__*/React.createElement("div", {
+    "class": "panel-body"
+  }, "Panel content")), /*#__PURE__*/React.createElement("form", {
     id: "loginForm",
     name: "loginForm",
     onSubmit: handleLogin,
@@ -66,7 +74,7 @@ var LoginWindow = function LoginWindow(props) {
     className: "formSubmit",
     type: "submit",
     value: "Sign In"
-  }));
+  })));
 };
 
 var homeWindow = function homeWindow(props) {

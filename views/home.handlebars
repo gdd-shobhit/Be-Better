@@ -1,6 +1,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>Zindagi RIT</title>
   <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
@@ -9,14 +11,18 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.6.2/remarkable.min.js"></script>
   <link rel="shortcut icon" href="/assets/img/favicon.png"/>
   <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
+  <img class="headerImage" src="/assets/img/HeaderWhite.png" alt="headerImage">
+  
 </head>
 <body> 
-  <nav><a href="/"><img id="logo" src="/assets/img/logo.png" alt="Z logo"/></a>
-  <div class="navlink"><a id="homeButotn" href="/">Home</a></div>
-    <div class="navlink"><a id="loginButton" href="/login">Login</a></div>
-    <div class="navlink"><a id="signupButton" href="/signup">Sign up</a></div>
-  </nav>
-  <div class="banner"></div>
+   {{!-- <div class="banner"></div> --}}
+     <ul>
+  <li><img id="logo" src="/assets/img/logo.png" alt="Z logo"/></li>
+  <li><a href="/">Home</a></li>
+  <li><a id="loginButton" href="/login">Login</a></li>
+  <li><a id="signupButton" href="/signup">Sign up</a></li>
+    </ul>
+   
   <section id="content"></section>
   <div id="domoMessage"><img id="speech" src="/assets/img/speech.png" alt="speech box"/>
     <h3><span id="errorMessage">Wrong username or password</span></h3><img id="domo" src="assets/img/domo.png" alt="domo"/>
