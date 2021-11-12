@@ -69,6 +69,39 @@ var LoginWindow = function LoginWindow(props) {
   }));
 };
 
+var homeWindow = function homeWindow(props) {
+  return /*#__PURE__*/React.createElement("form", {
+    id: "loginForm",
+    name: "loginForm",
+    onSubmit: handleLogin,
+    action: "/login",
+    method: "POST",
+    className: "mainForm"
+  }, /*#__PURE__*/React.createElement("label", {
+    htmlFor: "username"
+  }, "Username: "), /*#__PURE__*/React.createElement("input", {
+    id: "user",
+    type: "text",
+    name: "username",
+    placeholder: "username"
+  }), /*#__PURE__*/React.createElement("label", {
+    htmlFor: "pass"
+  }, "Password: "), /*#__PURE__*/React.createElement("input", {
+    id: "pass",
+    type: "password",
+    name: "pass",
+    placeholder: "password"
+  }), /*#__PURE__*/React.createElement("input", {
+    type: "hidden",
+    name: "_csrf",
+    value: props.csrf
+  }), /*#__PURE__*/React.createElement("input", {
+    className: "formSubmit",
+    type: "submit",
+    value: "Sign In"
+  }));
+};
+
 var SignupWindow = function SignupWindow(props) {
   return /*#__PURE__*/React.createElement("form", {
     id: "signupForm",
@@ -98,6 +131,13 @@ var SignupWindow = function SignupWindow(props) {
     type: "password",
     name: "pass2",
     placeholder: "retype password"
+  }), /*#__PURE__*/React.createElement("label", {
+    htmlFor: "pass3"
+  }, "Member Password(Optional): "), /*#__PURE__*/React.createElement("input", {
+    id: "pass3",
+    type: "password",
+    name: "pass3",
+    placeholder: "member password"
   }), /*#__PURE__*/React.createElement("input", {
     type: "hidden",
     name: "_csrf",
@@ -113,6 +153,12 @@ var createLoginWindow = function createLoginWindow(csrf) {
   ReactDOM.render( /*#__PURE__*/React.createElement(LoginWindow, {
     csrf: csrf
   }), document.querySelector("#content"));
+};
+
+var createHomePage = function createHomePage() {
+  ReactDom.render( /*#__PURE__*/React.createElement("homeWindow", {
+    csrf: csrf
+  }), document.querySelector("content"));
 };
 
 var createSignupWindow = function createSignupWindow(csrf) {
