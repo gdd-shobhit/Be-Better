@@ -1,14 +1,10 @@
 const handleLogin = (e) => {
     e.preventDefault();
 
-    $("#domoMessage").animate({width:'hide'},350);
-
     if($("#user").val() == '' || $("#pass").val() == '') {
-        handleError("RAWR! Username or password is empty");
+        handleError("Username or Password empty");
         return false;
     }
-
-    console.log($("input[name=_csrf]").val());
 
     sendAjax('POST', $("#loginForm").attr("action"), $("#loginForm").serialize(),redirect);
 
@@ -18,15 +14,13 @@ const handleLogin = (e) => {
 const handleSignup = (e) => {
     e.preventDefault();
 
-    $("#domoMessage").animate({width:'hide'},350);
-
     if($("#user").val() == '' || $("#pass").val() == '' || $("#pass2").val() == '') {
-        handleError("RAWR! All fields are required");
+        handleError("All fields are required");
         return false;
     }
 
     if($("#pass").val() !== $("#pass2").val()) {
-        handleError("RAWR! Passwords do not match");
+        handleError("Password do not match");
         return false;
     }
 
@@ -37,48 +31,20 @@ const handleSignup = (e) => {
 
 const LoginWindow = (props) => {
     return (
-
-        <div>
-        <div class="panel panel-primary panel-transparent">
-  <div class="panel-heading">
-    <h3 class="panel-title">Panel primary</h3>
-  </div>
-  <div class="panel-body">
-    Panel content
-  </div>
-</div>
+   
         <form id="loginForm" name="loginForm"
         onSubmit={handleLogin}
         action="/login"
         method="POST"
         className="mainForm"
         >
-            <label htmlFor="username">Username: </label>
-            <input id="user" type="text" name="username" placeholder="username"/>
-            <label htmlFor="pass">Password: </label>
-            <input id="pass" type="password" name="pass" placeholder="password"/>
-            <input type="hidden" name="_csrf" value={props.csrf} />
-            <input className="formSubmit" type="submit" value="Sign In"/>
-
-        </form>
-        </div>
-    );
-};
-
-const homeWindow = (props) => {
-    return (
-        <form id="loginForm" name="loginForm"
-        onSubmit={handleLogin}
-        action="/login"
-        method="POST"
-        className="mainForm"
-        >
-            <label htmlFor="username">Username: </label>
-            <input id="user" type="text" name="username" placeholder="username"/>
-            <label htmlFor="pass">Password: </label>
-            <input id="pass" type="password" name="pass" placeholder="password"/>
-            <input type="hidden" name="_csrf" value={props.csrf} />
-            <input className="formSubmit" type="submit" value="Sign In"/>
+            
+        <label htmlFor="user">Username: </label>
+        <input id="user" type="text" name="username" placeholder="username"/>
+        <label htmlFor="pass">Password: </label>
+        <input id="pass" type="password" name="pass" placeholder="password"/>
+        <input className="formSubmit" type="submit" value="Sign In"/>
+        <input type="hidden" name="_csrf" value={props.csrf} />
 
         </form>
     );
@@ -93,44 +59,55 @@ const SignupWindow = (props) => {
         method="POST"
         className="mainForm"
         >
-            <label htmlFor="username">Username: </label>
-            <input id="user" type="text" name="username" placeholder="username" />
-            <label htmlFor="pass">Password: </label>
-            <input id="pass" type="password" name="pass" placeholder="password" />
-            <label htmlFor="pass2">Password: </label>
-            <input id="pass2" type="password" name="pass2" placeholder="retype password" />
-            <label htmlFor="pass3">Member Password(Optional): </label>
-            <input id="pass3" type="password" name="pass3" placeholder="member password" />
-            <input type="hidden" name="_csrf" value={props.csrf} />
-            <input className="formSubmit" type="submit" value="Sign Up" />
+
+        <label htmlFor="user">Username*: </label>
+        <input id="user" type="text" name="username" placeholder="username"/>
+        <label htmlFor="pass">Password*: </label>
+        <input id="pass" type="password" name="pass" placeholder="password"/>
+        <label htmlFor="pass2">Password*: </label>
+        <input id="pass2" type="password" name="pass2" placeholder="retype password" />
+        <label htmlFor="pass3">Admin Pass: </label>
+        <input id="pass3" type="password" name="pass3" placeholder="admin pass(optional)" />    
+        <input type="hidden" name="_csrf" value={props.csrf} />
+        <input className="formSubmit" type="submit" value="Sign Up" />
+      
         </form>
+       
+    );
+};
+
+const Container = () =>{
+    return(
+        <div className="shopContainer">
+        </div>
+    );
+}
+
+const Wrapper = () =>{
+    return(
+        <div className="shopWrapper">
+        </div>
     );
 };
 
 const createLoginWindow = (csrf) => {
     ReactDOM.render(
-        <LoginWindow csrf={csrf} />,
-        document.querySelector("#content")
-    );
-};
-
-const createHomePage = () =>{
-    ReactDom.render(
-        <homeWindow csrf={csrf} />,
-        document.querySelector("content")
+                <LoginWindow csrf={csrf} /> ,
+        document.querySelector("#shopLogin")
     );
 };
 
 const createSignupWindow = (csrf) =>{
     ReactDOM.render(
-        <SignupWindow csrf={csrf} />,
-        document.querySelector("#content")
+                <SignupWindow csrf={csrf} />,
+        document.querySelector("#shopLogin")
     );
 };
 
 const setup = (csrf) => {
     const loginButton = document.querySelector("#loginButton");
     const signupButton = document.querySelector("#signupButton");
+
 
     signupButton.addEventListener("click", (e) => {
         e.preventDefault();
@@ -143,6 +120,9 @@ const setup = (csrf) => {
         createLoginWindow(csrf);
         return false;
     });
+
+ 
+   
 
     createLoginWindow(csrf);
 };

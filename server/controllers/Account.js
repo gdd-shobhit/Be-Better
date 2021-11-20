@@ -1,4 +1,5 @@
 //const { response } = require('express');
+const jwt = require('jsonwebtoken');
 const models = require('../models');
 
 const { Account }  = models;
@@ -33,8 +34,8 @@ const login = (request, response) => {
     }
 
     req.session.account = Account.AccountModel.toAPI(account);
-
-    return res.json({ redirect: '/maker' });
+    req.body.token = req.session.account.token ;
+    return res.json({ redirect: '/home' });
   });
 };
 
@@ -45,7 +46,8 @@ const signup = (request, response) => {
   const username = `${req.body.username}`;
   const password = `${req.body.pass}`;
   const password2 = `${req.body.pass2}`;
-
+  const adminPass = `${req.body.pass3}`;
+  let admin = false;
   if (!username || !password || !password2) {
     return res.status(400).json({ error: 'All Fields are Required' });
   }
@@ -54,9 +56,15 @@ const signup = (request, response) => {
     return res.status(400).json({ error: 'Passwords do not match' });
   }
 
+  if(adminPass === "admin"){
+    admin = true;
+  }
+
   return Account.AccountModel.generateHash(req.body.pass, (salt, hash) => {
+    
     const accountData = {
       username,
+      admin,
       salt,
       password: hash,
     };
@@ -67,7 +75,7 @@ const signup = (request, response) => {
 
     savePromise.then(() => {
       req.session.account = Account.AccountModel.toAPI(newAccount);
-      return res.json({ redirect: '/maker' });
+      return res.json({ redirect: '/home' });
     });
 
     savePromise.catch((err) => {

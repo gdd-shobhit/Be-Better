@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 const mongoose = require('mongoose');
-
+const mid = require('../middleware/index.js')
 mongoose.Promise = global.Promise;
 
 let AccountModel = {};
@@ -19,6 +19,7 @@ const AccountSchema = new mongoose.Schema({
   admin:{
     type: Boolean,
     required:true,
+    default:false,
   },
   salt: {
     type: Buffer,
@@ -39,6 +40,15 @@ AccountSchema.statics.toAPI = (doc) => ({
   username: doc.username,
   _id: doc._id,
 });
+
+const changePassword = (doc,password,newPassword,callback) => {
+  const pass = doc.pass;
+
+  if(pass!=password)
+  {
+    return callback(false);
+  }
+}
 
 const validatePassword = (doc, password, callback) => {
   const pass = doc.password;
@@ -79,6 +89,11 @@ AccountSchema.statics.authenticate = (username, password, callback) => {
       if (result === true) {
         return callback(null, doc);
       }
+
+      mid.verifyToken(req,res,(err)=>{
+        if(err)
+        return callback(null,doc);
+      })
 
       return callback();
     });

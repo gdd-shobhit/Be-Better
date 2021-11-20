@@ -1,102 +1,5 @@
 "use strict";
 
-var handleDomo = function handleDomo(e) {
-  e.preventDefault();
-  $("#domoMessage").animate({
-    width: 'hide'
-  }, 350);
-
-  if ($("#domoName").val() == '' || $("#domoAge").val() == '' || $("#domoLevel").val() == '') {
-    handleError("RAWR! All Fields are required");
-    return false;
-  }
-
-  sendAjax('POST', $("#domoForm").attr("action"), $("#domoForm").serialize(), function () {
-    loadDomosFromServer();
-  });
-  return false;
-};
-
-var handleDelete = function handleDelete(e) {
-  e.preventDefault();
-
-  if ($("#domoNameDelete").val() == '') {
-    handleError("RAWR! All Fields are required");
-    return false;
-  }
-
-  sendAjax('DELETE', $('#domoDeleteForm').attr("action"), $("#domoDeleteForm").serialize(), function () {
-    loadDomosFromServer();
-  });
-  return false;
-};
-
-var DomoForm = function DomoForm(props) {
-  return /*#__PURE__*/React.createElement("form", {
-    id: "domoForm",
-    onSubmit: handleDomo,
-    name: "domoForm",
-    action: "/maker",
-    method: "POST",
-    className: "domoForm"
-  }, /*#__PURE__*/React.createElement("label", {
-    htmlFor: "name"
-  }, "Name: "), /*#__PURE__*/React.createElement("input", {
-    id: "domoName",
-    type: "text",
-    name: "name",
-    placeholder: "Domo Name"
-  }), /*#__PURE__*/React.createElement("label", {
-    htmlFor: "age"
-  }, "Age: "), /*#__PURE__*/React.createElement("input", {
-    id: "domoAge",
-    type: "text",
-    name: "age",
-    placeholder: "Domo Age"
-  }), /*#__PURE__*/React.createElement("label", {
-    htmlFor: "level"
-  }, "Level: "), /*#__PURE__*/React.createElement("input", {
-    id: "domoLevel",
-    type: "text",
-    name: "level",
-    placeholder: "Domo Level"
-  }), /*#__PURE__*/React.createElement("input", {
-    type: "hidden",
-    name: "_csrf",
-    value: props.csrf
-  }), /*#__PURE__*/React.createElement("input", {
-    className: "makeDomoSubmit",
-    type: "submit",
-    value: "Make Domo"
-  }));
-};
-
-var DomoDeleteForm = function DomoDeleteForm(props) {
-  return /*#__PURE__*/React.createElement("form", {
-    id: "domoDeleteForm",
-    onSubmit: handleDelete,
-    name: "domoFormDelete",
-    action: "/maker",
-    method: "DELETE",
-    className: "domoForm"
-  }, /*#__PURE__*/React.createElement("label", {
-    htmlFor: "deleteName"
-  }, "Name: "), /*#__PURE__*/React.createElement("input", {
-    id: "domoNameDelete",
-    type: "text",
-    name: "deleteName",
-    placeholder: "Domo Name"
-  }), /*#__PURE__*/React.createElement("input", {
-    type: "hidden",
-    name: "_csrf",
-    value: props.csrf
-  }), /*#__PURE__*/React.createElement("input", {
-    className: "makeDomoSubmit",
-    type: "submit",
-    value: "Delete Domo"
-  }));
-};
-
 var ItemList = function ItemList(props) {
   if (props.items.length === 0) {
     return /*#__PURE__*/React.createElement("div", {
@@ -107,13 +10,14 @@ var ItemList = function ItemList(props) {
   }
 
   var itemNodes = props.items.map(function (item) {
+    var imageSource = "/retrieve?fileName=".concat(item.name);
     return /*#__PURE__*/React.createElement("div", {
       key: item._id,
       className: "item"
     }, /*#__PURE__*/React.createElement("img", {
-      src: item.image,
+      src: imageSource,
       alt: "item preview",
-      className: "domoFace"
+      className: "itemFace"
     }), /*#__PURE__*/React.createElement("h3", {
       className: "itemName"
     }, " Name: ", item.name, " "), /*#__PURE__*/React.createElement("h3", {
@@ -123,34 +27,80 @@ var ItemList = function ItemList(props) {
     }, " Add To Cart "));
   });
   return /*#__PURE__*/React.createElement("div", {
-    className: "domoList"
-  }, domoNodes);
+    className: "itemList"
+  }, itemNodes);
 };
 
-var loadDomosFromServer = function loadDomosFromServer() {
-  sendAjax('GET', '/getDomos', null, function (data) {
-    ReactDOM.render( /*#__PURE__*/React.createElement(DomoList, {
-      domos: data.domos
-    }), document.querySelector("#domos"));
+var loadItemsFromServer = function loadItemsFromServer() {
+  sendAjax('GET', '/getItems', null, function (data) {
+    ReactDOM.render( /*#__PURE__*/React.createElement(ItemList, {
+      items: data.items
+    }), document.querySelector("#itemsDiv"));
   });
+  return false;
+};
+
+var handleUpload = function handleUpload(e) {
+  e.preventDefault();
+  sendAjax('POST', $("#uploadForm").attr("action"), $("#uploadForm").serialize(), function () {// loadItemsFromServer();
+  });
+  return false;
+};
+
+var UploadItemForm = function UploadItemForm(props) {
+  return /*#__PURE__*/React.createElement("form", {
+    id: "uploadForm",
+    onSubmit: handleUpload,
+    action: "/upload",
+    method: "POST",
+    encType: "multipart/form-data"
+  }, /*#__PURE__*/React.createElement("label", {
+    htmlFor: "productName"
+  }, "Product Name: "), /*#__PURE__*/React.createElement("input", {
+    id: "productName",
+    type: "text",
+    name: "productName",
+    placeholder: "Product Name"
+  }), /*#__PURE__*/React.createElement("label", {
+    htmlFor: "price"
+  }, "Price: "), /*#__PURE__*/React.createElement("input", {
+    id: "price",
+    type: "text",
+    name: "price",
+    placeholder: "Price"
+  }), /*#__PURE__*/React.createElement("label", {
+    htmlFor: "productImage"
+  }, "Product Image"), /*#__PURE__*/React.createElement("input", {
+    type: "file",
+    name: "sampleFile"
+  }), /*#__PURE__*/React.createElement("input", {
+    type: "hidden",
+    name: "_csrf",
+    value: props.csrf
+  }), /*#__PURE__*/React.createElement("input", {
+    type: "submit",
+    value: "Upload!"
+  }));
+};
+
+var setupItemUpload = function setupItemUpload(csrf) {
+  ReactDOM.render( /*#__PURE__*/React.createElement(UploadItemForm, {
+    csrf: csrf
+  }), document.querySelector("#uploadFormSection"));
 };
 
 var setup = function setup(csrf) {
-  ReactDOM.render( /*#__PURE__*/React.createElement(DomoForm, {
-    csrf: csrf
-  }), document.querySelector("#makeDomo"));
-  ReactDOM.render( /*#__PURE__*/React.createElement(DomoDeleteForm, {
-    csrf: csrf
-  }), document.querySelector("#deleteDomo"));
   ReactDOM.render( /*#__PURE__*/React.createElement(ItemList, {
-    items: []
-  }), document.querySelector("#items"));
-  loadDomosFromServer();
+    items: [],
+    csrf: csrf
+  }), document.querySelector("#itemsDiv"));
+  loadItemsFromServer();
 };
 
 var getToken = function getToken() {
   sendAjax('GET', '/getToken', null, function (result) {
-    setup(result.csrfToken);
+    console.log(result.csrfToken);
+    setup(result.csrfToken); // setupItemUpload(result.csrfToken);
   });
 };
 
@@ -167,9 +117,6 @@ var handleError = function handleError(message) {
 };
 
 var redirect = function redirect(response) {
-  $("#domoMessage").animate({
-    width: 'hide'
-  }, 350);
   window.location = response.redirect;
 };
 
@@ -182,8 +129,9 @@ var sendAjax = function sendAjax(type, action, data, success) {
     dataType: "json",
     success: success,
     error: function error(xhr, status, _error) {
+      console.log(xhr.responseText);
       var messageObj = JSON.parse(xhr.responseText);
-      handleError(messageObj.error);
+      console.log(messageObj);
     }
   });
 };

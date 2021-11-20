@@ -2,33 +2,26 @@
 
 var handleLogin = function handleLogin(e) {
   e.preventDefault();
-  $("#domoMessage").animate({
-    width: 'hide'
-  }, 350);
 
   if ($("#user").val() == '' || $("#pass").val() == '') {
-    handleError("RAWR! Username or password is empty");
+    handleError("Username or Password empty");
     return false;
   }
 
-  console.log($("input[name=_csrf]").val());
   sendAjax('POST', $("#loginForm").attr("action"), $("#loginForm").serialize(), redirect);
   return false;
 };
 
 var handleSignup = function handleSignup(e) {
   e.preventDefault();
-  $("#domoMessage").animate({
-    width: 'hide'
-  }, 350);
 
   if ($("#user").val() == '' || $("#pass").val() == '' || $("#pass2").val() == '') {
-    handleError("RAWR! All fields are required");
+    handleError("All fields are required");
     return false;
   }
 
   if ($("#pass").val() !== $("#pass2").val()) {
-    handleError("RAWR! Passwords do not match");
+    handleError("Password do not match");
     return false;
   }
 
@@ -37,47 +30,6 @@ var handleSignup = function handleSignup(e) {
 };
 
 var LoginWindow = function LoginWindow(props) {
-  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-    "class": "panel panel-primary panel-transparent"
-  }, /*#__PURE__*/React.createElement("div", {
-    "class": "panel-heading"
-  }, /*#__PURE__*/React.createElement("h3", {
-    "class": "panel-title"
-  }, "Panel primary")), /*#__PURE__*/React.createElement("div", {
-    "class": "panel-body"
-  }, "Panel content")), /*#__PURE__*/React.createElement("form", {
-    id: "loginForm",
-    name: "loginForm",
-    onSubmit: handleLogin,
-    action: "/login",
-    method: "POST",
-    className: "mainForm"
-  }, /*#__PURE__*/React.createElement("label", {
-    htmlFor: "username"
-  }, "Username: "), /*#__PURE__*/React.createElement("input", {
-    id: "user",
-    type: "text",
-    name: "username",
-    placeholder: "username"
-  }), /*#__PURE__*/React.createElement("label", {
-    htmlFor: "pass"
-  }, "Password: "), /*#__PURE__*/React.createElement("input", {
-    id: "pass",
-    type: "password",
-    name: "pass",
-    placeholder: "password"
-  }), /*#__PURE__*/React.createElement("input", {
-    type: "hidden",
-    name: "_csrf",
-    value: props.csrf
-  }), /*#__PURE__*/React.createElement("input", {
-    className: "formSubmit",
-    type: "submit",
-    value: "Sign In"
-  })));
-};
-
-var homeWindow = function homeWindow(props) {
   return /*#__PURE__*/React.createElement("form", {
     id: "loginForm",
     name: "loginForm",
@@ -86,7 +38,7 @@ var homeWindow = function homeWindow(props) {
     method: "POST",
     className: "mainForm"
   }, /*#__PURE__*/React.createElement("label", {
-    htmlFor: "username"
+    htmlFor: "user"
   }, "Username: "), /*#__PURE__*/React.createElement("input", {
     id: "user",
     type: "text",
@@ -100,13 +52,13 @@ var homeWindow = function homeWindow(props) {
     name: "pass",
     placeholder: "password"
   }), /*#__PURE__*/React.createElement("input", {
-    type: "hidden",
-    name: "_csrf",
-    value: props.csrf
-  }), /*#__PURE__*/React.createElement("input", {
     className: "formSubmit",
     type: "submit",
     value: "Sign In"
+  }), /*#__PURE__*/React.createElement("input", {
+    type: "hidden",
+    name: "_csrf",
+    value: props.csrf
   }));
 };
 
@@ -119,33 +71,33 @@ var SignupWindow = function SignupWindow(props) {
     method: "POST",
     className: "mainForm"
   }, /*#__PURE__*/React.createElement("label", {
-    htmlFor: "username"
-  }, "Username: "), /*#__PURE__*/React.createElement("input", {
+    htmlFor: "user"
+  }, "Username*: "), /*#__PURE__*/React.createElement("input", {
     id: "user",
     type: "text",
     name: "username",
     placeholder: "username"
   }), /*#__PURE__*/React.createElement("label", {
     htmlFor: "pass"
-  }, "Password: "), /*#__PURE__*/React.createElement("input", {
+  }, "Password*: "), /*#__PURE__*/React.createElement("input", {
     id: "pass",
     type: "password",
     name: "pass",
     placeholder: "password"
   }), /*#__PURE__*/React.createElement("label", {
     htmlFor: "pass2"
-  }, "Password: "), /*#__PURE__*/React.createElement("input", {
+  }, "Password*: "), /*#__PURE__*/React.createElement("input", {
     id: "pass2",
     type: "password",
     name: "pass2",
     placeholder: "retype password"
   }), /*#__PURE__*/React.createElement("label", {
     htmlFor: "pass3"
-  }, "Member Password(Optional): "), /*#__PURE__*/React.createElement("input", {
+  }, "Admin Pass: "), /*#__PURE__*/React.createElement("input", {
     id: "pass3",
     type: "password",
     name: "pass3",
-    placeholder: "member password"
+    placeholder: "admin pass(optional)"
   }), /*#__PURE__*/React.createElement("input", {
     type: "hidden",
     name: "_csrf",
@@ -157,22 +109,28 @@ var SignupWindow = function SignupWindow(props) {
   }));
 };
 
+var Container = function Container() {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "shopContainer"
+  });
+};
+
+var Wrapper = function Wrapper() {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "shopWrapper"
+  });
+};
+
 var createLoginWindow = function createLoginWindow(csrf) {
   ReactDOM.render( /*#__PURE__*/React.createElement(LoginWindow, {
     csrf: csrf
-  }), document.querySelector("#content"));
-};
-
-var createHomePage = function createHomePage() {
-  ReactDom.render( /*#__PURE__*/React.createElement("homeWindow", {
-    csrf: csrf
-  }), document.querySelector("content"));
+  }), document.querySelector("#shopLogin"));
 };
 
 var createSignupWindow = function createSignupWindow(csrf) {
   ReactDOM.render( /*#__PURE__*/React.createElement(SignupWindow, {
     csrf: csrf
-  }), document.querySelector("#content"));
+  }), document.querySelector("#shopLogin"));
 };
 
 var setup = function setup(csrf) {
@@ -210,9 +168,6 @@ var handleError = function handleError(message) {
 };
 
 var redirect = function redirect(response) {
-  $("#domoMessage").animate({
-    width: 'hide'
-  }, 350);
   window.location = response.redirect;
 };
 
@@ -225,8 +180,9 @@ var sendAjax = function sendAjax(type, action, data, success) {
     dataType: "json",
     success: success,
     error: function error(xhr, status, _error) {
+      console.log(xhr.responseText);
       var messageObj = JSON.parse(xhr.responseText);
-      handleError(messageObj.error);
+      console.log(messageObj);
     }
   });
 };

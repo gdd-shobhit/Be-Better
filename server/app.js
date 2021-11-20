@@ -11,10 +11,12 @@ const RedisStore = require('connect-redis')(session);
 const url = require('url');
 const csrf = require('csurf');
 const redis = require('redis');
+const fileUpload = require('express-fileupload');
+const jwt = require('jsonwebtoken');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
-const dbURL = process.env.MONGODB_URI || 'mongodb://localhost/DomoMaker';
+const dbURL = process.env.MONGODB_URI || 'mongodb://localhost/ZindagiSite';
 
 mongoose.connect(dbURL, (err) => {
   if (err) {
@@ -48,6 +50,7 @@ app.use('/assets', express.static(path.resolve(`${__dirname}/../hosted/`)));
 app.use(favicon(`${__dirname}/../hosted/img/favicon.png`));
 app.disable('x-powered-by');
 app.use(compression());
+app.use(fileUpload());
 app.use(bodyParser.urlencoded({
   extended: true,
 }));
@@ -66,7 +69,7 @@ app.use(session({
 app.engine('handlebars', expressHandlebars({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 app.set('views', `${__dirname}/../views`);
-
+app.disable('x-powered-by');
 app.use(cookieParser());
 app.use(csrf());
 app.use((err,req,res,next) =>{
