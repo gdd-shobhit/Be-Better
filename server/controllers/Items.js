@@ -1,32 +1,31 @@
 const models = require('../models');
+
 const Item = models.Items;
 
 const uploadPage = (req, res) => {
-  Item.ItemModel.findAll((err,docs) => {
-    if(err) {
+  Item.ItemModel.findAll((err, docs) => {
+    if (err) {
       console.log(err);
-      return res.status(400).json({error: 'An error occurred'});
+      return res.status(400).json({ error: 'An error occurred' });
     }
-    
-    return res.render('itemUpload', {csrfToken: req.csrfToken(), items:docs});
+
+    return res.render('itemUpload', { csrfToken: req.csrfToken(), items: docs });
   });
 };
 
 const merchPage = (req, res) => {
-  Item.ItemModel.findAll((err,docs) => {
-    if(err) {
+  Item.ItemModel.findAll((err, docs) => {
+    if (err) {
       console.log(err);
-      return res.status(400).json({error: 'An error occurred'});
+      return res.status(400).json({ error: 'An error occurred' });
     }
-    
-    return res.render('shop', {csrfToken: req.csrfToken(), items:docs});
+
+    return res.render('shop', { csrfToken: req.csrfToken(), items: docs });
   });
 };
 
-
 // Our upload handler.
 const uploadFile = (req, res) => {
-
   if (!req.files || Object.keys(req.files).length === 0) {
     return res.status(400).json({ error: 'No files were uploaded' });
   }
@@ -41,10 +40,10 @@ const uploadFile = (req, res) => {
   const ItemObject = {
     name: req.body.name,
     price: req.body.price,
-    tags:['Shirt','Sweatshirt'],
+    tags: ['Shirt', 'Sweatshirt'],
     owner: req.session.account._id,
     image: sampleFile,
-  }
+  };
 
   // Once we have the file, we want to create a mongo document based on that file
   // that can be stored in our database.
@@ -74,7 +73,6 @@ const uploadFile = (req, res) => {
 
 // Our retrieval handler.
 const retrieveFile = (req, res) => {
-
   if (!req.query.fileName) {
     return res.status(400).json({ error: 'Missing File Name! ' });
   }
@@ -99,32 +97,29 @@ const retrieveFile = (req, res) => {
   });
 };
 
+const getItems = (request, response) => {
+  const res = response;
 
-const getItems = (request,response) => {
-    
-    const res = response;
-  
-    return Item.ItemModel.findAll((err,docs) => {
-      if(err) {
-        console.log(err);
-        return res.status(400).json({error:'An error occurred'});
-      }
-  
-      return res.json({items:docs});
-    });
+  return Item.ItemModel.findAll((err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occurred' });
+    }
+
+    return res.json({ items: docs });
+  });
+};
+
+const getToken = (request, response) => {
+  const req = request;
+  const res = response;
+
+  const csrfJSON = {
+    csrfToken: req.csrfToken(),
   };
 
-  const getToken = (request,response) => {
-    const req  = request;
-    const res = response;
-  
-    const csrfJSON = {
-      csrfToken: req.csrfToken(),
-    };
-  
-    res.json(csrfJSON);
-  };
-
+  res.json(csrfJSON);
+};
 
 module.exports.getToken = getToken;
 module.exports.getItems = getItems;

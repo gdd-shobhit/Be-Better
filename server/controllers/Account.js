@@ -1,12 +1,12 @@
 const models = require('../models');
 
-const { Account }  = models;
+const { Account } = models;
 
 const loginPage = (req, res) => {
-  res.render('login', {csrfToken: req.csrfToken()});
+  res.render('login', { csrfToken: req.csrfToken() });
 };
 
-const homePage = (req,res) => {
+const homePage = (req, res) => {
   res.render('home');
 };
 
@@ -32,7 +32,7 @@ const login = (request, response) => {
     }
 
     req.session.account = Account.AccountModel.toAPI(account);
-    req.body.token = req.session.account.token ;
+    req.body.token = req.session.account.token;
     return res.json({ redirect: '/home' });
   });
 };
@@ -54,12 +54,11 @@ const signup = (request, response) => {
     return res.status(400).json({ error: 'Passwords do not match' });
   }
 
-  if(adminPass === "admin"){
+  if (adminPass === 'admin') {
     admin = true;
   }
 
   return Account.AccountModel.generateHash(req.body.pass, (salt, hash) => {
-    
     const accountData = {
       username,
       admin,
@@ -88,9 +87,8 @@ const signup = (request, response) => {
   });
 };
 
-
-const getToken = (request,response) => {
-  const req  = request;
+const getToken = (request, response) => {
+  const req = request;
   const res = response;
 
   const csrfJSON = {

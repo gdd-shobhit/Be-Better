@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 const mongoose = require('mongoose');
-const mid = require('../middleware/index.js')
+
 mongoose.Promise = global.Promise;
 
 let AccountModel = {};
@@ -16,10 +16,10 @@ const AccountSchema = new mongoose.Schema({
     unique: true,
     match: /^[A-Za-z0-9_\-.]{1,16}$/,
   },
-  admin:{
+  admin: {
     type: Boolean,
-    required:true,
-    default:false,
+    required: true,
+    default: false,
   },
   salt: {
     type: Buffer,
@@ -51,9 +51,9 @@ AccountSchema.statics.toAPI = (doc) => ({
 //   }
 
 //   const hash = generateHash(newPassword,(err,hash) => {
-    
+
 //   })
-  
+
 // }
 
 const validatePassword = (doc, password, callback) => {
@@ -82,7 +82,7 @@ AccountSchema.statics.generateHash = (password, callback) => {
 };
 
 AccountSchema.statics.authenticate = (username, password, callback) => {
-  return AccountModel.findByUsername(username, (err, doc) => {
+  AccountModel.findByUsername(username, (err, doc) => {
     if (err) {
       return callback(err);
     }
@@ -95,7 +95,7 @@ AccountSchema.statics.authenticate = (username, password, callback) => {
       if (result === true) {
         return callback(null, doc);
       }
-      
+
       return callback();
     });
   });

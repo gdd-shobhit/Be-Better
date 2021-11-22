@@ -30,14 +30,14 @@ let redisURL = {
 };
 
 let redisPASS = 'aq9Jaq0q0561Sd7mmHYjkzqpOCFgxRk4';
-if(process.env.REDISCLOUD_URL) {
+if (process.env.REDISCLOUD_URL) {
   redisURL = url.parse(process.env.REDISCLOUD_URL);
-  [,redisPASS] = redisURL.auth.split(':');
+  [, redisPASS] = redisURL.auth.split(':');
 }
 
-let redisClient = redis.createClient({
-  host:redisURL.hostname,
-  port:redisURL.port,
+const redisClient = redis.createClient({
+  host: redisURL.hostname,
+  port: redisURL.port,
   password: redisPASS,
 });
 
@@ -54,16 +54,16 @@ app.use(bodyParser.urlencoded({
   extended: true,
 }));
 app.use(session({
-  key:'sessionid',
+  key: 'sessionid',
   store: new RedisStore({
     client: redisClient,
   }),
-  secret:'beBetter',
-  resave:true,
-  saveUninitialized:true,
+  secret: 'beBetter',
+  resave: true,
+  saveUninitialized: true,
   cookie: {
     httpOnly: true,
-  }
+  },
 }));
 app.engine('handlebars', expressHandlebars({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
@@ -71,9 +71,9 @@ app.set('views', `${__dirname}/../views`);
 app.disable('x-powered-by');
 app.use(cookieParser());
 app.use(csrf());
-app.use((err,req,res,next) =>{
-  if(err.code !== 'EBADCSRFTOKEN') return next(err);
-  
+app.use((err, req, res, next) => {
+  if (err.code !== 'EBADCSRFTOKEN') return next(err);
+
   console.log('Missing CSRF token');
   return false;
 });
