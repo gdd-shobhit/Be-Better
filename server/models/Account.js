@@ -96,8 +96,8 @@ AccountSchema.statics.authenticate = (username, password, callback) => {
         return callback(null, doc);
       }
 
-      mid.verifyToken(req,res,(err)=>{
-        if(err)
+      mid.verifyToken(req,res,(err1)=>{
+        if(err1)
         return callback(null,doc);
       })
 
