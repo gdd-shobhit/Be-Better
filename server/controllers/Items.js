@@ -101,7 +101,7 @@ const retrieveFile = (req, res) => {
 
 
 const getItems = (request,response) => {
-    const req = request;
+    
     const res = response;
   
     return Item.ItemModel.findAll((err,docs) => {

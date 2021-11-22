@@ -41,14 +41,20 @@ AccountSchema.statics.toAPI = (doc) => ({
   _id: doc._id,
 });
 
-const changePassword = (doc,password,newPassword,callback) => {
-  const pass = doc.pass;
+// const changePassword = (doc,password,newPassword,callback) => {
+//   const pass = doc.pass;
 
-  if(pass!=password)
-  {
-    return callback(false);
-  }
-}
+//   // old password check
+//   if(pass!=password || newPassword == "")
+//   {
+//     return callback(false);
+//   }
+
+//   const hash = generateHash(newPassword,(err,hash) => {
+    
+//   })
+  
+// }
 
 const validatePassword = (doc, password, callback) => {
   const pass = doc.password;

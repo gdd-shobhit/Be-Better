@@ -4,7 +4,7 @@ const _ = require('underscore');
 
 let ItemModel = {};
 
-const convertId = mongoose.Types.ObjectId;
+//const convertId = mongoose.Types.ObjectId;
 const setName = (name) => _.escape(name).trim();
 
 const ItemSchema = new mongoose.Schema({

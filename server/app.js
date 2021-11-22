@@ -12,7 +12,6 @@ const url = require('url');
 const csrf = require('csurf');
 const redis = require('redis');
 const fileUpload = require('express-fileupload');
-const jwt = require('jsonwebtoken');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
@@ -59,7 +58,7 @@ app.use(session({
   store: new RedisStore({
     client: redisClient,
   }),
-  secret:'Zindagi Bollywood',
+  secret:'beBetter',
   resave:true,
   saveUninitialized:true,
   cookie: {

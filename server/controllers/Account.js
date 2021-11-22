@@ -1,5 +1,3 @@
-//const { response } = require('express');
-const jwt = require('jsonwebtoken');
 const models = require('../models');
 
 const { Account }  = models;
