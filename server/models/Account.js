@@ -82,7 +82,7 @@ AccountSchema.statics.generateHash = (password, callback) => {
 };
 
 AccountSchema.statics.authenticate = (username, password, callback) => {
-  AccountModel.findByUsername(username, (err, doc) => {
+  return AccountModel.findByUsername(username, (err, doc) => {
     if (err) {
       return callback(err);
     }
@@ -95,12 +95,7 @@ AccountSchema.statics.authenticate = (username, password, callback) => {
       if (result === true) {
         return callback(null, doc);
       }
-
-      mid.verifyToken(req,res,(err1)=>{
-        if(err1)
-        return callback(null,doc);
-      })
-
+      
       return callback();
     });
   });
