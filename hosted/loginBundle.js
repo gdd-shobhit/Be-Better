@@ -109,6 +109,53 @@ var SignupWindow = function SignupWindow(props) {
   }));
 };
 
+var ChangePasswordWindow = function ChangePasswordWindow(props) {
+  return /*#__PURE__*/React.createElement("form", {
+    id: "changePassForm",
+    name: "signupForm",
+    onSubmit: handleSignup,
+    action: "/signup",
+    method: "POST",
+    className: "mainForm"
+  }, /*#__PURE__*/React.createElement("label", {
+    htmlFor: "user"
+  }, "Username*: "), /*#__PURE__*/React.createElement("input", {
+    id: "user",
+    type: "text",
+    name: "username",
+    placeholder: "username"
+  }), /*#__PURE__*/React.createElement("label", {
+    htmlFor: "pass"
+  }, "Password*: "), /*#__PURE__*/React.createElement("input", {
+    id: "pass",
+    type: "password",
+    name: "pass",
+    placeholder: "password"
+  }), /*#__PURE__*/React.createElement("label", {
+    htmlFor: "pass2"
+  }, "Password*: "), /*#__PURE__*/React.createElement("input", {
+    id: "pass2",
+    type: "password",
+    name: "pass2",
+    placeholder: "retype password"
+  }), /*#__PURE__*/React.createElement("label", {
+    htmlFor: "pass3"
+  }, "Admin Pass: "), /*#__PURE__*/React.createElement("input", {
+    id: "pass3",
+    type: "password",
+    name: "pass3",
+    placeholder: "admin pass(optional)"
+  }), /*#__PURE__*/React.createElement("input", {
+    type: "hidden",
+    name: "_csrf",
+    value: props.csrf
+  }), /*#__PURE__*/React.createElement("input", {
+    className: "formSubmit",
+    type: "submit",
+    value: "Sign Up"
+  }));
+};
+
 var Container = function Container() {
   return /*#__PURE__*/React.createElement("div", {
     className: "shopContainer"
@@ -129,6 +176,12 @@ var createLoginWindow = function createLoginWindow(csrf) {
 
 var createSignupWindow = function createSignupWindow(csrf) {
   ReactDOM.render( /*#__PURE__*/React.createElement(SignupWindow, {
+    csrf: csrf
+  }), document.querySelector("#shopLogin"));
+};
+
+var createChangePasswordWindow = function createChangePasswordWindow(csrf) {
+  ReactDOM.render( /*#__PURE__*/React.createElement(ChangePasswordWindow, {
     csrf: csrf
   }), document.querySelector("#shopLogin"));
 };

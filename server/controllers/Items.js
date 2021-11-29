@@ -49,7 +49,6 @@ const uploadFile = (req, res) => {
   // that can be stored in our database.
   const fileDoc = new Item.ItemModel(ItemObject);
 
-  console.log(fileDoc);
   // Once we have that mongo document, we can save it into the database.
   const savePromise = fileDoc.save();
 
@@ -78,7 +77,6 @@ const retrieveFile = (req, res) => {
   }
 
   return Item.ItemModel.findOne({ name: req.query.fileName }, (error, doc) => {
-    console.log(doc);
     // If there is an error, log it and send a 400 back to the client.
     if (error) {
       console.dir(error);

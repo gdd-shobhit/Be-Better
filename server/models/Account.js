@@ -41,20 +41,20 @@ AccountSchema.statics.toAPI = (doc) => ({
   _id: doc._id,
 });
 
-// const changePassword = (doc,password,newPassword,callback) => {
-//   const pass = doc.pass;
+const changePassword = (doc,oldPassword,newPassword,callback) => {
+  const pass = doc.pass;
 
-//   // old password check
-//   if(pass!=password || newPassword == "")
-//   {
-//     return callback(false);
-//   }
+  // old password check
+  if(pass != oldPassword || newPassword == "")
+  {
+    return callback(false);
+  }
 
-//   const hash = generateHash(newPassword,(err,hash) => {
+  const hash = generateHash(newPassword,(err,hash) => {
+    
+  });
 
-//   })
-
-// }
+};
 
 const validatePassword = (doc, password, callback) => {
   const pass = doc.password;
@@ -105,3 +105,4 @@ AccountModel = mongoose.model('Account', AccountSchema);
 
 module.exports.AccountModel = AccountModel;
 module.exports.AccountSchema = AccountSchema;
+

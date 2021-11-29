@@ -3,11 +3,11 @@ const models = require('../models');
 const { Account } = models;
 
 const loginPage = (req, res) => {
-  res.render('login', { csrfToken: req.csrfToken() });
+  res.render('login', { csrfToken: req.csrfToken(), loggedIn:false });
 };
 
 const homePage = (req, res) => {
-  res.render('home');
+  res.render('home',{ csrfToken: req.csrfToken(), loggedIn:true});
 };
 
 const logout = (req, res) => {
@@ -97,6 +97,18 @@ const getToken = (request, response) => {
 
   res.json(csrfJSON);
 };
+
+const changePassword = (request,response) => {
+
+  const req = request;
+  const res = response;
+  
+  const username = `${req.body.user}`;
+  const oldPassword = `${req.body.oldPass}`;
+  const newPassword = `${req.body.newPass}`;
+
+  
+}
 
 module.exports.loginPage = loginPage;
 module.exports.login = login;

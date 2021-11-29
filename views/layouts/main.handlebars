@@ -14,7 +14,10 @@
   <li><a id="loginButton" href="/login">Login</a></li>
   <li><a id="signupButton" href="/signup">Sign up</a></li>
   <li><a id="shopButton" href="/shop">Merch</a></li>
+  {{#if loggedIn}}
+  
   <li><a id="logoutButton" href="/logout">Logout</a></li>
+  {{/if}}  
     </ul>
      
   {{{body}}}

@@ -76,6 +76,32 @@ const SignupWindow = (props) => {
     );
 };
 
+const ChangePasswordWindow = (props) => {
+    return (
+        <form id="changePassForm" 
+        name="signupForm"
+        onSubmit={handleSignup}
+        action="/signup"
+        method="POST"
+        className="mainForm"
+        >
+
+        <label htmlFor="user">Username*: </label>
+        <input id="user" type="text" name="username" placeholder="username"/>
+        <label htmlFor="pass">Password*: </label>
+        <input id="pass" type="password" name="pass" placeholder="password"/>
+        <label htmlFor="pass2">Password*: </label>
+        <input id="pass2" type="password" name="pass2" placeholder="retype password" />
+        <label htmlFor="pass3">Admin Pass: </label>
+        <input id="pass3" type="password" name="pass3" placeholder="admin pass(optional)" />    
+        <input type="hidden" name="_csrf" value={props.csrf} />
+        <input className="formSubmit" type="submit" value="Sign Up" />
+      
+        </form>
+       
+    );
+};
+
 const Container = () =>{
     return(
         <div className="shopContainer">
@@ -100,6 +126,14 @@ const createLoginWindow = (csrf) => {
 const createSignupWindow = (csrf) =>{
     ReactDOM.render(
                 <SignupWindow csrf={csrf} />,
+        document.querySelector("#shopLogin")
+    );
+};
+
+
+const createChangePasswordWindow = (csrf) =>{
+    ReactDOM.render(
+                <ChangePasswordWindow csrf={csrf} />,
         document.querySelector("#shopLogin")
     );
 };
