@@ -29,6 +29,23 @@ var handleSignup = function handleSignup(e) {
   return false;
 };
 
+var handlePassChange = function handlePassChange(e) {
+  e.preventDefault();
+
+  if ($("#oldPass").val() == '' || $("#newPass").val() == '' || $("#newPass2").val() == '' || $('#user').val() == '') {
+    handleError("All fields are required");
+    return false;
+  }
+
+  if ($("#newPass").val() !== $("#newPass2").val()) {
+    handleError("Password do not match");
+    return false;
+  }
+
+  sendAjax('POST', $("#changePassForm").attr("action"), $("#changePassForm").serialize(), redirect);
+  return false;
+};
+
 var LoginWindow = function LoginWindow(props) {
   return /*#__PURE__*/React.createElement("form", {
     id: "loginForm",
@@ -112,9 +129,9 @@ var SignupWindow = function SignupWindow(props) {
 var ChangePasswordWindow = function ChangePasswordWindow(props) {
   return /*#__PURE__*/React.createElement("form", {
     id: "changePassForm",
-    name: "signupForm",
-    onSubmit: handleSignup,
-    action: "/signup",
+    name: "changePassForm",
+    onSubmit: handlePassChange,
+    action: "/changePassword",
     method: "POST",
     className: "mainForm"
   }, /*#__PURE__*/React.createElement("label", {
@@ -122,29 +139,29 @@ var ChangePasswordWindow = function ChangePasswordWindow(props) {
   }, "Username*: "), /*#__PURE__*/React.createElement("input", {
     id: "user",
     type: "text",
-    name: "username",
+    name: "user",
     placeholder: "username"
   }), /*#__PURE__*/React.createElement("label", {
-    htmlFor: "pass"
-  }, "Password*: "), /*#__PURE__*/React.createElement("input", {
-    id: "pass",
+    htmlFor: "oldPass"
+  }, "Old Password*: "), /*#__PURE__*/React.createElement("input", {
+    id: "oldPass",
     type: "password",
-    name: "pass",
-    placeholder: "password"
+    name: "oldPass",
+    placeholder: "Old Password"
   }), /*#__PURE__*/React.createElement("label", {
-    htmlFor: "pass2"
-  }, "Password*: "), /*#__PURE__*/React.createElement("input", {
-    id: "pass2",
+    htmlFor: "newPass"
+  }, "New Password*: "), /*#__PURE__*/React.createElement("input", {
+    id: "newPass",
     type: "password",
-    name: "pass2",
-    placeholder: "retype password"
+    name: "newPass",
+    placeholder: "New Password"
   }), /*#__PURE__*/React.createElement("label", {
-    htmlFor: "pass3"
-  }, "Admin Pass: "), /*#__PURE__*/React.createElement("input", {
-    id: "pass3",
+    htmlFor: "newPass2"
+  }, "New Password "), /*#__PURE__*/React.createElement("input", {
+    id: "newPass2",
     type: "password",
-    name: "pass3",
-    placeholder: "admin pass(optional)"
+    name: "newPass2",
+    placeholder: "Retype Password"
   }), /*#__PURE__*/React.createElement("input", {
     type: "hidden",
     name: "_csrf",
@@ -152,20 +169,8 @@ var ChangePasswordWindow = function ChangePasswordWindow(props) {
   }), /*#__PURE__*/React.createElement("input", {
     className: "formSubmit",
     type: "submit",
-    value: "Sign Up"
+    value: "Change Password"
   }));
-};
-
-var Container = function Container() {
-  return /*#__PURE__*/React.createElement("div", {
-    className: "shopContainer"
-  });
-};
-
-var Wrapper = function Wrapper() {
-  return /*#__PURE__*/React.createElement("div", {
-    className: "shopWrapper"
-  });
 };
 
 var createLoginWindow = function createLoginWindow(csrf) {
@@ -189,6 +194,7 @@ var createChangePasswordWindow = function createChangePasswordWindow(csrf) {
 var setup = function setup(csrf) {
   var loginButton = document.querySelector("#loginButton");
   var signupButton = document.querySelector("#signupButton");
+  var changePassButton = document.querySelector("#changePassButton");
   signupButton.addEventListener("click", function (e) {
     e.preventDefault();
     createSignupWindow(csrf);
@@ -197,6 +203,11 @@ var setup = function setup(csrf) {
   loginButton.addEventListener("click", function (e) {
     e.preventDefault();
     createLoginWindow(csrf);
+    return false;
+  });
+  changePassButton.addEventListener("click", function (e) {
+    e.preventDefault();
+    createChangePasswordWindow(csrf);
     return false;
   });
   createLoginWindow(csrf);
@@ -215,9 +226,6 @@ $(document).ready(function () {
 
 var handleError = function handleError(message) {
   $("#errorMessage").text(message);
-  $("#domoMessage").animate({
-    width: 'toggle'
-  }, 350);
 };
 
 var redirect = function redirect(response) {

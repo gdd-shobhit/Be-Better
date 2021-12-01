@@ -18,9 +18,7 @@
     upload files using the standard form-urlencoded encoding type. Also note that because we
     are using the default html form action, we have named out file sampleFile. This will become
     relevant in our src/controllers/files.js when trying to access the file on the server. -->
-    <section id="uploadFormSection"></section>
-
-      <form 
+      {{!-- <form 
       id='uploadForm' 
       action='/upload' 
       method='POST' 
@@ -36,16 +34,24 @@
     </form> 
     <section id="items"></section>
     
-    <!-- Get form. Just a standard GET request getting made with a query parameter of ?filename -->
-    <form ref='retrieveForm' 
-      id='retrieveForm' 
-      action='/retrieve' 
-      method='get'>
-      <label for='fileName'>Retrieve Product By Name: </label>
+    <form
+      id='deleteForm' 
+      action='/deleteItem' 
+      method='DELETE'>
+      <label for='fileName'>Delete Product By Name: </label>
       <input name='fileName' type='text' />
-      <input type='submit' value='Download!' />
-    </form>
-      <script src="/assets/bundle.js"></script>
+      <input type="hidden" name="_csrf" value={{csrfToken}} />
+      <input type='submit' value='Delete!' />
+    </form> --}}
+
+      <section id="uploadFormSection"> 
+
+      </section>
+
+      <section id="deleteFormSection"> 
+        
+      </section>
+      <script src="/assets/shopBundle.js"></script>
   </body>
 </html>
   </body>

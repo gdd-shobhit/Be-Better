@@ -3,21 +3,34 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Zindagi Shop</title>
   <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.6.2/remarkable.min.js"></script>
   <link rel="shortcut icon" href="/assets/img/favicon.png"/>
-  <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
+  <link rel="stylesheet" type="text/css" href="/assets/shopStyle.css"/>
 </head>
 <body> 
-    <div class="itemsWrapper">
-      <div class="items" id="itemsDiv" >
-      </div>
+
+  <h1>Shop</h1>
     
-  </div>
+    <div class="split">
+    <div class="shopWrapper">
+      <div class="items" id="itemsDiv"></div>
+    </div>
+    <div class="CheckoutPanel">
+      <div class="headings">
+      <div class="Header">
+      <h3 class="Heading">Shopping Cart</h3>
+      <h5 class="Action">Remove all</h5>
+      </div>
+      <div id="CartItems">
+
+      </div>
+      </div>
+    </div>
+    </div>
   <script src="/assets/bundle.js"></script>
 </body>
 </html>

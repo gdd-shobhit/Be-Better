@@ -39,22 +39,9 @@ AccountSchema.statics.toAPI = (doc) => ({
   // _id is built into your mongo document and is guaranteed to be unique
   username: doc.username,
   _id: doc._id,
+  admin:doc.admin,
 });
 
-const changePassword = (doc,oldPassword,newPassword,callback) => {
-  const pass = doc.pass;
-
-  // old password check
-  if(pass != oldPassword || newPassword == "")
-  {
-    return callback(false);
-  }
-
-  const hash = generateHash(newPassword,(err,hash) => {
-    
-  });
-
-};
 
 const validatePassword = (doc, password, callback) => {
   const pass = doc.password;

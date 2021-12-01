@@ -2,14 +2,25 @@ const models = require('../models');
 
 const Item = models.Items;
 
+
+
 const uploadPage = (req, res) => {
   Item.ItemModel.findAll((err, docs) => {
     if (err) {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
     }
-
-    return res.render('itemUpload', { csrfToken: req.csrfToken(), items: docs });
+    let loggedIn = false;
+    let admin = false;
+    if(req.session.account != null)
+    {
+      loggedIn = true;
+      if(req.session.account.admin)
+      {
+        admin = true;
+      }
+    }
+    return res.render('itemUpload', { csrfToken: req.csrfToken(), items: docs, loggedIn:loggedIn, admin:admin} );
   });
 };
 
@@ -19,13 +30,30 @@ const merchPage = (req, res) => {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
     }
+    
+    console.log(req.session.account);
 
-    return res.render('shop', { csrfToken: req.csrfToken(), items: docs });
+    let loggedIn = false;
+    let admin = false;
+    if(req.session.account != null)
+    {
+      loggedIn = true;
+      if(req.session.account.admin)
+      {
+        admin = true;
+      }
+    }
+
+    return res.render('shop', { csrfToken: req.csrfToken(), items: docs, loggedIn:loggedIn, admin:admin});
   });
 };
 
 // Our upload handler.
 const uploadFile = (req, res) => {
+
+  if(!req.session.account.admin)
+   return res.status(404).json({message:"You are not an admin"});
+
   if (!req.files || Object.keys(req.files).length === 0) {
     return res.status(400).json({ error: 'No files were uploaded' });
   }
@@ -55,7 +83,7 @@ const uploadFile = (req, res) => {
   // The promises 'then' event is called if the document is successfully stored in
   // the database. If that is the case, we will send a success message to the user.
   savePromise.then(() => {
-    res.status(201).json({ message: 'Upload Successful! ' });
+    return res.json({ redirect: '/shop' }); 
   });
 
   // The promises 'catch' event is called if there is an error when adding the document
@@ -95,6 +123,30 @@ const retrieveFile = (req, res) => {
   });
 };
 
+const deleteItem = (request,response) => {
+  const req = request;
+  const res = response;
+
+  return Item.ItemModel.deleteByName(req.body.fileName,(err,docs)=>{
+    if(err)
+    {
+      console.log(err);
+      return res.status(400).json({error:'An error occurred'});
+    }
+
+    console.log("here");
+    if(!docs)
+    {
+      
+      return res.status(404).json({error:'Item not found',redirect:'/shop'});
+    }
+
+    return res.json({deletedItem: docs, redirect:'shop'})
+  });
+
+
+}
+
 const getItems = (request, response) => {
   const res = response;
 
@@ -125,3 +177,4 @@ module.exports.uploadPage = uploadPage;
 module.exports.uploadFile = uploadFile;
 module.exports.retrieveFile = retrieveFile;
 module.exports.merchPage = merchPage;
+module.exports.deleteItem = deleteItem;

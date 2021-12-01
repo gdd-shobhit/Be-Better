@@ -5,18 +5,20 @@ const router = (app) => {
   app.get('/getToken', mid.requiresSecure, controllers.Account.getToken);
   app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
+  app.post('/changePassword',mid.requiresSecure,controllers.Account.changePassword);
+  app.get('/changePassword',mid.requiresSecure,mid.requiresLogin,controllers.Account.loginPage);
   app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
   app.get('/logout', mid.requiresSecure,mid.requiresLogin, controllers.Account.logout);
-  app.get('/shop', mid.requiresSecure, controllers.Items.merchPage);
-  app.get('/home', mid.requiresSecure, controllers.Account.homePage);
+  app.get('/shop', mid.requiresSecure,mid.requiresLogin, controllers.Items.merchPage);
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
   app.get('/getItems', mid.requiresSecure, mid.requiresLogin, controllers.Items.getItems);
   // Setup post requests to /upload.
-  app.post('/upload', controllers.Items.uploadFile);
-
+  app.post('/upload',mid.requiresSecure,mid.requiresLogin, controllers.Items.uploadFile);
+  // app.get('/upload',mid.requiresSecure,mid.requiresLogin,controllers.Items.merchPage);
   // Setup get requests to /retrieve
-  app.get('/retrieve', mid.requiresSecure, controllers.Items.retrieveFile);
-
+  app.get('/retrieve', mid.requiresSecure,mid.requiresLogin,controllers.Items.retrieveFile);
+  app.delete('/deleteItem',mid.requiresSecure,mid.requiresLogin,controllers.Items.deleteItem);
+  // app.get('/deleteItem',mid.requiresSecure,mid.requiresLogin,controllers.Items.merchPage);
   // Setup get requests to the root for the index page.
   app.get('/uploadPage', controllers.Items.uploadPage);
 };

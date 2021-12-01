@@ -1,5 +1,30 @@
 "use strict";
 
+var ItemInCart = function ItemInCart(props) {
+  var imageSource = "/retrieve?fileName=".concat(props.item.name);
+  return /*#__PURE__*/React.createElement("div", {
+    className: "cart-item-container"
+  }, /*#__PURE__*/React.createElement("img", {
+    src: imageSource
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "about"
+  }, /*#__PURE__*/React.createElement("h1", {
+    className: "title"
+  }, props.item.name), /*#__PURE__*/React.createElement("h3", {
+    className: "subtitle"
+  }, "Qty: 1")), /*#__PURE__*/React.createElement("div", {
+    className: "prices"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "amount"
+  }, "$", props.item.price)));
+};
+
+var handleAddToCart = function handleAddToCart(item) {
+  ReactDOM.render( /*#__PURE__*/React.createElement(ItemInCart, {
+    item: item
+  }), document.querySelector("#CartItems"));
+};
+
 var ItemList = function ItemList(props) {
   if (props.items.length === 0) {
     return /*#__PURE__*/React.createElement("div", {
@@ -13,18 +38,21 @@ var ItemList = function ItemList(props) {
     var imageSource = "/retrieve?fileName=".concat(item.name);
     return /*#__PURE__*/React.createElement("div", {
       key: item._id,
-      className: "item"
+      className: "item-container"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "itemImg"
     }, /*#__PURE__*/React.createElement("img", {
       src: imageSource,
       alt: "item preview",
       className: "itemFace"
-    }), /*#__PURE__*/React.createElement("h3", {
-      className: "itemName"
-    }, " Name: ", item.name, " "), /*#__PURE__*/React.createElement("h3", {
-      className: "itemPrice"
-    }, " Price: ", item.price, " "), /*#__PURE__*/React.createElement("button", {
-      className: "addButton"
-    }, " Add To Cart "));
+    })), /*#__PURE__*/React.createElement("div", {
+      className: "itemInfo"
+    }, /*#__PURE__*/React.createElement("h2", null, item.name), /*#__PURE__*/React.createElement("h3", {
+      className: "price"
+    }, "$", item.price)), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
+      className: "item-button",
+      onClick: handleAddToCart
+    }, " Add To Cart ")));
   });
   return /*#__PURE__*/React.createElement("div", {
     className: "itemList"
@@ -40,55 +68,6 @@ var loadItemsFromServer = function loadItemsFromServer() {
   return false;
 };
 
-var handleUpload = function handleUpload(e) {
-  e.preventDefault();
-  sendAjax('POST', $("#uploadForm").attr("action"), $("#uploadForm").serialize(), function () {// loadItemsFromServer();
-  });
-  return false;
-};
-
-var UploadItemForm = function UploadItemForm(props) {
-  return /*#__PURE__*/React.createElement("form", {
-    id: "uploadForm",
-    onSubmit: handleUpload,
-    action: "/upload",
-    method: "POST",
-    encType: "multipart/form-data"
-  }, /*#__PURE__*/React.createElement("label", {
-    htmlFor: "productName"
-  }, "Product Name: "), /*#__PURE__*/React.createElement("input", {
-    id: "productName",
-    type: "text",
-    name: "productName",
-    placeholder: "Product Name"
-  }), /*#__PURE__*/React.createElement("label", {
-    htmlFor: "price"
-  }, "Price: "), /*#__PURE__*/React.createElement("input", {
-    id: "price",
-    type: "text",
-    name: "price",
-    placeholder: "Price"
-  }), /*#__PURE__*/React.createElement("label", {
-    htmlFor: "productImage"
-  }, "Product Image"), /*#__PURE__*/React.createElement("input", {
-    type: "file",
-    name: "sampleFile"
-  }), /*#__PURE__*/React.createElement("input", {
-    type: "hidden",
-    name: "_csrf",
-    value: props.csrf
-  }), /*#__PURE__*/React.createElement("input", {
-    type: "submit",
-    value: "Upload!"
-  }));
-};
-
-var setupItemUpload = function setupItemUpload(csrf) {
-  ReactDOM.render( /*#__PURE__*/React.createElement(UploadItemForm, {
-    csrf: csrf
-  }), document.querySelector("#uploadFormSection"));
-};
-
 var setup = function setup(csrf) {
   ReactDOM.render( /*#__PURE__*/React.createElement(ItemList, {
     items: [],
@@ -100,7 +79,7 @@ var setup = function setup(csrf) {
 var getToken = function getToken() {
   sendAjax('GET', '/getToken', null, function (result) {
     console.log(result.csrfToken);
-    setup(result.csrfToken); // setupItemUpload(result.csrfToken);
+    setup(result.csrfToken);
   });
 };
 
@@ -111,9 +90,6 @@ $(document).ready(function () {
 
 var handleError = function handleError(message) {
   $("#errorMessage").text(message);
-  $("#domoMessage").animate({
-    width: 'toggle'
-  }, 350);
 };
 
 var redirect = function redirect(response) {

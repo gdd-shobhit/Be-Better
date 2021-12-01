@@ -69,6 +69,14 @@ ItemSchema.statics.toAPI = (doc) => ({
   image: doc.image,
 });
 
+ItemSchema.statics.deleteByName = (itemName,callback) => {
+  const toDelete = {
+    name:itemName,
+  };
+
+  return ItemModel.deleteOne(toDelete).exec(callback);
+};
+
 ItemSchema.statics.findAll = (callback) => ItemModel.find({}).select('name price tags image').exec(callback);
 
 ItemSchema.statics.findByTags = (itemTag, callback) => {

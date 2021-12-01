@@ -29,6 +29,25 @@ const handleSignup = (e) => {
     return false;
 };
 
+const handlePassChange = (e) => {
+    e.preventDefault();
+
+    if($("#oldPass").val() == '' || $("#newPass").val() == '' || $("#newPass2").val() == '' || $('#user').val() == '') {
+        handleError("All fields are required");
+        return false;
+    }
+
+    if($("#newPass").val() !== $("#newPass2").val()) {
+        handleError("Password do not match");
+        return false;
+    }
+
+    sendAjax('POST', $("#changePassForm").attr("action"), $("#changePassForm").serialize(), redirect);
+
+    return false;
+};
+
+
 const LoginWindow = (props) => {
     return (
    
@@ -79,40 +98,26 @@ const SignupWindow = (props) => {
 const ChangePasswordWindow = (props) => {
     return (
         <form id="changePassForm" 
-        name="signupForm"
-        onSubmit={handleSignup}
-        action="/signup"
+        name="changePassForm"
+        onSubmit={handlePassChange}
+        action="/changePassword"
         method="POST"
         className="mainForm"
         >
 
         <label htmlFor="user">Username*: </label>
-        <input id="user" type="text" name="username" placeholder="username"/>
-        <label htmlFor="pass">Password*: </label>
-        <input id="pass" type="password" name="pass" placeholder="password"/>
-        <label htmlFor="pass2">Password*: </label>
-        <input id="pass2" type="password" name="pass2" placeholder="retype password" />
-        <label htmlFor="pass3">Admin Pass: </label>
-        <input id="pass3" type="password" name="pass3" placeholder="admin pass(optional)" />    
+        <input id="user" type="text" name="user" placeholder="username"/>
+        <label htmlFor="oldPass">Old Password*: </label>
+        <input id="oldPass" type="password" name="oldPass" placeholder="Old Password"/>
+        <label htmlFor="newPass">New Password*: </label>
+        <input id="newPass" type="password" name="newPass" placeholder="New Password" />
+        <label htmlFor="newPass2">New Password </label>
+        <input id="newPass2" type="password" name="newPass2" placeholder="Retype Password" />    
         <input type="hidden" name="_csrf" value={props.csrf} />
-        <input className="formSubmit" type="submit" value="Sign Up" />
+        <input className="formSubmit" type="submit" value="Change Password" />
       
         </form>
        
-    );
-};
-
-const Container = () =>{
-    return(
-        <div className="shopContainer">
-        </div>
-    );
-}
-
-const Wrapper = () =>{
-    return(
-        <div className="shopWrapper">
-        </div>
     );
 };
 
@@ -132,6 +137,7 @@ const createSignupWindow = (csrf) =>{
 
 
 const createChangePasswordWindow = (csrf) =>{
+    
     ReactDOM.render(
                 <ChangePasswordWindow csrf={csrf} />,
         document.querySelector("#shopLogin")
@@ -141,7 +147,7 @@ const createChangePasswordWindow = (csrf) =>{
 const setup = (csrf) => {
     const loginButton = document.querySelector("#loginButton");
     const signupButton = document.querySelector("#signupButton");
-
+    const changePassButton = document.querySelector("#changePassButton");
 
     signupButton.addEventListener("click", (e) => {
         e.preventDefault();
@@ -155,8 +161,11 @@ const setup = (csrf) => {
         return false;
     });
 
- 
-   
+    changePassButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        createChangePasswordWindow(csrf);
+        return false;
+    });
 
     createLoginWindow(csrf);
 };
