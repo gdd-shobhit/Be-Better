@@ -1,7 +1,5 @@
 const models = require('../models');
 const crypto = require('crypto');
-const { isArguments, some } = require('underscore');
-const { AccountSchema } = require('../models/Account');
 const { Account } = models;
 const Item = models.Items;
 
@@ -178,27 +176,52 @@ const getCart = async (request,response)=>{
         admin = true;
       }
     }
-    for (const id of doc.itemsInCart)
-  {
-    let itemFound = items.find(x=> (x.id===id));
-    if(itemFound)
-    {
-      items[items.indexOf(itemFound)].qty++;
+
+    for (const _id of doc.itemsInCart) {
+
+      if(items.length ==0)
+      {
+        let item = await Item.ItemModel.findOne({_id}).select('id name price').lean();
+        let obj = {
+        _id: item._id,
+        name: item.name,
+        price: item.price,
+        qty:1
+        }
+        items.push(obj); 
+        console.log(items);
+      }
+      else{
+        let found = false;
+        for(const obj of items)
+        {
+
+          let something =Item.ItemModel;
+          something._id = _id;
+          console.log(something._id);
+          if(obj._id === something._id)
+          {
+            console.log("here");
+            obj.qty++;
+            found = true;
+            break;
+          }
+        }
+        if(!found)
+        {
+          let item = await Item.ItemModel.findOne({_id}).select('id name price').lean();
+          let obj = {
+          _id: item._id,
+          name: item.name,
+          price: item.price,
+          qty:1
+          }
+          items.push(obj); 
+        }
+
+      }
     }
-    else{
-      await Item.ItemModel.findById(id,(err,itemDoc)=>{
-        if(err)
-          console.log(err);
-            let obj = {id:itemDoc[0].id,
-              name:itemDoc[0].name,
-              price:itemDoc[0].price,
-              qty:1};
-              items.push(obj); 
-                console.log(obj);
-      });
-    }
-  }
-  console.log("here");
+    console.log("here");
   return res.status(200).json( { itemsInCart: doc.itemsInCart, loggedIn:loggedIn, admin:admin, items:items});
 
   });

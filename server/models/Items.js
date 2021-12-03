@@ -99,7 +99,7 @@ ItemSchema.statics.findById = async (objectId,callback) => {
     _id:objectId,
   };
 
-  await ItemModel.find(search).select('name price').exec(callback);
+  return ItemModel.findOne(search).select('name price').exec(callback);
 }
 
 ItemModel = mongoose.model('Items', ItemSchema);

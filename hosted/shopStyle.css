@@ -9,12 +9,6 @@ body{
    ul{
        position: sticky;
    }
-   .split{
-    display: flex;
-    flex-flow: row wrap;
-    margin-left: 20px;
-    margin-right: 20px;
-   }
 
    .ItemList{
        display: flex;
@@ -29,39 +23,16 @@ body{
     order:2;
    }
 
-   .cart-item-container{
-    width:15%;
-    height: auto;
-    text-align: center;
-   }
-
-   .cart-item-container img{
-    max-width: 100%;
-   }
-
    .shopWrapper{
     flex:1;
    }
 
-   .CheckoutPanel{
-    display: flex;
-    flex-direction: row;
-    flex:1;
-    background-color: white;
-    border-radius: 20px;
-    box-shadow: 0px 25px 40px #1687d933;
-    
-   }
+
    .headings{
     flex:1;
     
    }
 
-   .CartItems{
-       display: flex;
-       flex-direction: row;
-       flex:1;
-   }
    .image-box{
     width: 15%;
     text-align: center;

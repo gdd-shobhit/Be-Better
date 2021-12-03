@@ -83,10 +83,10 @@ var getToken = function getToken() {
   sendAjax('GET', '/getToken', null, function (result) {
     console.log(result.csrfToken);
     setup(result.csrfToken);
-  });
-  sendAjax('GET', '/getCart', null, function (result) {
-    cartItemsId = result.itemsInCart;
-    document.querySelector("#cartButton").innerHTML = "Cart: ".concat(cartItemsId.length);
+    sendAjax('GET', '/getCart', null, function (result) {
+      cartItemsId = result.itemsInCart;
+      document.querySelector("#cartButton").innerHTML = "Cart: ".concat(cartItemsId.length);
+    });
   });
 };
 

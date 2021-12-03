@@ -14,9 +14,7 @@ var ItemsInCart = function ItemsInCart(props) {
     }, "No Items Yet"));
   }
 
-  var filteredCart = props.itemsInCart.sort();
-  console.log(filteredCart);
-  var cartItemNodes = props.itemsInCart.map(function (item) {
+  var cartItemNodes = items.map(function (item) {
     var imageSource = "/retrieve?fileName=".concat(item.name);
     return /*#__PURE__*/React.createElement("div", {
       key: item._id,
@@ -29,7 +27,7 @@ var ItemsInCart = function ItemsInCart(props) {
       className: "title"
     }, item.name), /*#__PURE__*/React.createElement("h3", {
       className: "subtitle"
-    }, "Qty: 1")), /*#__PURE__*/React.createElement("div", {
+    }, "Qty: ", item.qty)), /*#__PURE__*/React.createElement("div", {
       className: "prices"
     }, /*#__PURE__*/React.createElement("div", {
       className: "amount"
@@ -59,11 +57,10 @@ var loadCart = function loadCart() {
 };
 
 var setupCartPage = function setupCartPage(csrf) {
-  getCart();
-  console.log(cartItemsId);
+  getCart(csrf);
   ReactDOM.render( /*#__PURE__*/React.createElement(CartPage, {
     right: /*#__PURE__*/React.createElement(ItemsInCart, {
-      itemsInCart: cartItemsId,
+      itemsInCart: [],
       csrf: csrf
     })
   }), document.querySelector("#container"));
@@ -76,11 +73,17 @@ var getToken = function getToken() {
   console.log(cartItemsId);
 };
 
-var getCart = function getCart() {
+var getCart = function getCart(csrf) {
   sendAjax('GET', '/getCart', null, function (result) {
     cartItemsId = result.itemsInCart;
     items = result.items;
     document.querySelector("#cartButton").innerHTML = "Cart: ".concat(cartItemsId.length);
+    ReactDOM.render( /*#__PURE__*/React.createElement(CartPage, {
+      right: /*#__PURE__*/React.createElement(ItemsInCart, {
+        itemsInCart: cartItemsId,
+        csrf: csrf
+      })
+    }), document.querySelector("#container"));
   });
 };
 

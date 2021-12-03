@@ -81,11 +81,12 @@ const getToken = () => {
     sendAjax('GET', '/getToken', null, (result)=> {
         console.log(result.csrfToken);
         setup(result.csrfToken);
+        sendAjax('GET', '/getCart',null,(result)=>{
+            cartItemsId=result.itemsInCart;
+            document.querySelector("#cartButton").innerHTML = `Cart: ${cartItemsId.length}`;
+        });
     });
-    sendAjax('GET', '/getCart',null,(result)=>{
-        cartItemsId=result.itemsInCart;
-        document.querySelector("#cartButton").innerHTML = `Cart: ${cartItemsId.length}`;
-    });
+   
 };
 
 $(document).ready(function() {
