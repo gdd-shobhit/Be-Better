@@ -1,15 +1,12 @@
 "use strict";
 
-var _react = require("react");
-
 var _this = void 0;
 
 function _readOnlyError(name) { throw new TypeError("\"" + name + "\" is read-only"); }
 
 var handleUpload = function handleUpload(e) {
   e.preventDefault();
-  sendAjax('POST', $("#uploadForm").attr("action"), $("#uploadForm").serialize(), function () {//loadItemsFromServer();
-  });
+  sendAjax('POST', $("#uploadForm").attr("action"), $("#uploadForm").serialize(), function () {});
   return false;
 };
 
@@ -59,7 +56,7 @@ var onFileChange = function onFileChange(e) {
 };
 
 var UploadItemForm = function UploadItemForm(props) {
-  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("form", {
+  return /*#__PURE__*/React.createElement("form", {
     id: "uploadForm",
     onSubmit: handleUpload,
     action: "/upload",
@@ -80,7 +77,7 @@ var UploadItemForm = function UploadItemForm(props) {
     name: "price",
     placeholder: "Price"
   }), /*#__PURE__*/React.createElement("label", {
-    htmlFor: "productImage"
+    htmlFor: "sampleFile"
   }, "Product Image"), /*#__PURE__*/React.createElement("input", {
     type: "file",
     onChange: onFileChange,
@@ -92,7 +89,7 @@ var UploadItemForm = function UploadItemForm(props) {
   }), /*#__PURE__*/React.createElement("input", {
     type: "submit",
     value: "Upload!"
-  })));
+  }));
 };
 
 var setupItemUpload = function setupItemUpload(csrf) {
@@ -125,6 +122,15 @@ var redirect = function redirect(response) {
 };
 
 var sendAjax = function sendAjax(type, action, data, success) {
+  if (type == "POST") {
+    console.log(data);
+    $.ajaxSetup({
+      beforeSend: function beforeSend(xhr) {
+        xhr.setRequestHeader("X-CSRF-Token", data.csrf);
+      }
+    });
+  }
+
   $.ajax({
     cache: false,
     type: type,

@@ -8,6 +8,7 @@ var handleLogin = function handleLogin(e) {
     return false;
   }
 
+  console.log("here" + $("loginForm").serialize());
   sendAjax('POST', $("#loginForm").attr("action"), $("#loginForm").serialize(), redirect);
   return false;
 };
@@ -233,6 +234,15 @@ var redirect = function redirect(response) {
 };
 
 var sendAjax = function sendAjax(type, action, data, success) {
+  if (type == "POST") {
+    console.log(data);
+    $.ajaxSetup({
+      beforeSend: function beforeSend(xhr) {
+        xhr.setRequestHeader("X-CSRF-Token", data.csrf);
+      }
+    });
+  }
+
   $.ajax({
     cache: false,
     type: type,

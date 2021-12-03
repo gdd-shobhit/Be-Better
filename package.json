@@ -12,13 +12,15 @@
     "buildLoginBundle": "babel ./client/login ./client/helper --presets @babel/preset-react --out-file ./hosted/loginBundle.js",
     "buildAppBundle": "babel ./client/app ./client/helper --presets @babel/preset-react --out-file ./hosted/bundle.js",
     "buildShopBundle": "babel ./client/shop ./client/helper --presets @babel/preset-react --out-file ./hosted/shopBundle.js",
+    "buildCheckoutBundle":"babel ./client/cart ./client/helper --presets @babel/preset-react --out-file ./hosted/checkoutBundle.js",
     "nodemon": "nodemon --watch ./server ./server/app.js",
     "start": "node ./server/app.js",
     "pretest": "eslint ./server --fix",
     "test": "echo \"Tests complete\"",
     "watchLoginBundle": "babel --watch ./client/login ./client/helper --presets @babel/preset-react --out-file ./hosted/loginBundle.js",
     "watchAppBundle": "babel --watch ./client/app ./client/helper --presets @babel/preset-react --out-file ./hosted/bundle.js",
-    "watchShopBundle": "babel --watch ./client/shop ./client/helper --presets @babel/preset-react --out-file ./hosted/shopBundle.js"
+    "watchShopBundle": "babel --watch ./client/shop ./client/helper --presets @babel/preset-react --out-file ./hosted/shopBundle.js",
+    "watchCheckoutBundle": "babel --watch ./client/cart ./client/helper --presets @babel/preset-react --out-file ./hosted/checkoutBundle.js"
   },
   "keywords": [
     "Node",
@@ -37,7 +39,8 @@
     "eslint": "^8.1.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-plugin-import": "^2.25.2",
-    "nodemon": "^2.0.14"
+    "nodemon": "^2.0.14",
+    "react-imask": "^6.2.2"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

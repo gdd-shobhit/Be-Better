@@ -8,42 +8,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.6.2/remarkable.min.js"></script>
   <link rel="shortcut icon" href="/assets/img/favicon.png"/>
-  <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
   </head>
     
   <body>
     <html>
   <body>
-    <!-- Post form. Note that the encoding type is set to 'multipart/form-data'. You cannot
-    upload files using the standard form-urlencoded encoding type. Also note that because we
-    are using the default html form action, we have named out file sampleFile. This will become
-    relevant in our src/controllers/files.js when trying to access the file on the server. -->
-      {{!-- <form 
-      id='uploadForm' 
-      action='/upload' 
-      method='POST' 
-      encType="multipart/form-data">
-        <label htmlFor="name">Product Name: </label>
-        <input id="productName" type="text" name="name" placeholder="Product Name"/>
-        <label htmlFor="price">Price: </label>
-        <input id="price" type="text" name="price" placeholder="Price"/>
-        <label htmlFor="sampleFile">Product Image</label>
-        <input type="file" name="sampleFile" />
-        <input type="hidden" name="_csrf" value={{csrfToken}} />
-        <input type='submit' value='Upload!' />
-    </form> 
-    <section id="items"></section>
-    
-    <form
-      id='deleteForm' 
-      action='/deleteItem' 
-      method='DELETE'>
-      <label for='fileName'>Delete Product By Name: </label>
-      <input name='fileName' type='text' />
-      <input type="hidden" name="_csrf" value={{csrfToken}} />
-      <input type='submit' value='Delete!' />
-    </form> --}}
-
       <section id="uploadFormSection"> 
 
       </section>

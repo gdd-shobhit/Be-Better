@@ -31,7 +31,7 @@ const merchPage = (req, res) => {
       return res.status(400).json({ error: 'An error occurred' });
     }
     
-    console.log(req.session.account);
+    // console.log(req.session.account);
 
     let loggedIn = false;
     let admin = false;

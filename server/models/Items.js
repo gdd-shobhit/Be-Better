@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 const _ = require('underscore');
-
 let ItemModel = {};
 
 // const convertId = mongoose.Types.ObjectId;
@@ -92,8 +91,16 @@ ItemSchema.statics.findByName = (name, callback) => {
     name,
   };
 
-  return ItemModel.find(search).select('name price tags image').exec(callback);
+  return ItemModel.find(search).select('name price tags image').lean().exec(callback);
 };
+
+ItemSchema.statics.findById = async (objectId,callback) => {
+  const search = {
+    _id:objectId,
+  };
+
+  await ItemModel.find(search).select('name price').exec(callback);
+}
 
 ItemModel = mongoose.model('Items', ItemSchema);
 

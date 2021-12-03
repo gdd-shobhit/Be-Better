@@ -1,10 +1,8 @@
-import {useState} from 'react';
-
 const handleUpload = (e) =>{
     e.preventDefault();
 
     sendAjax('POST', $("#uploadForm").attr("action"), $("#uploadForm").serialize(), function() {
-        //loadItemsFromServer();
+        
     });
 
     return false;
@@ -58,7 +56,6 @@ const onFileChange = (e) => {
 
 const UploadItemForm = (props) => {
     return (
-        <div>
         <form 
       id='uploadForm' 
       onSubmit={handleUpload}
@@ -69,13 +66,11 @@ const UploadItemForm = (props) => {
         <input id="productName" type="text" name="productName" placeholder="Product Name"/>
         <label htmlFor="price">Price: </label>
         <input id="price" type="text" name="price" placeholder="Price"/>
-        <label htmlFor="productImage">Product Image</label>
+        <label htmlFor="sampleFile">Product Image</label>
         <input type="file" onChange={onFileChange} name="sampleFile" />
         <input type="hidden" name="_csrf" value={props.csrf} />
         <input type='submit' value='Upload!' />
     </form> 
-
-</div>
     );
 };
 const setupItemUpload = function(csrf) {

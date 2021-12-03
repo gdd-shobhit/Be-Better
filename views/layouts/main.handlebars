@@ -14,10 +14,15 @@
       <ul>
   <li class="logo"><img id="logo" src="/assets/img/logo.png" alt="logo"/></li>
   <li><a href="/">Home</a></li>
+    {{#if admin}}
+    <li><a id="uploadButton" href="/uploadPage">Upload Merch</a></li>
+    {{/if}}
+
   {{#if loggedIn}}
    <li><a id="shopButton" href="/shop">Merch</a></li>
   <li><a id="logoutButton" href="/logout">Logout</a></li>
   <li><a id="changePassButton" href="/changePassword">ChangePassword</a></li>
+  <li><a id="cartButton" href="/cart" class="cart" aria-label="View your shopping cart">Cart: 0</a></li>
   
 {{else}}
   <li><a id="loginButton" href="/login">Login</a></li>
@@ -25,9 +30,7 @@
   <li><a id="signupButton" href="/signup">Sign up</a></li>
   {{/if}}
 
-  {{#if admin}}
-    <li><a id="uploadButton" href="/uploadPage">Upload Merch</a></li>
-    {{/if}}
+
     </ul>
     </nav>
      

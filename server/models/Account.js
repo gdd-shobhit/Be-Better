@@ -1,6 +1,5 @@
 const crypto = require('crypto');
 const mongoose = require('mongoose');
-
 mongoose.Promise = global.Promise;
 
 let AccountModel = {};
@@ -29,6 +28,13 @@ const AccountSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+
+  itemsInCart: {
+  type: [mongoose.Schema.Types.ObjectId],
+  required:true,
+  ref:'Items'
+  },
+  
   createdDate: {
     type: Date,
     default: Date.now,
@@ -40,6 +46,7 @@ AccountSchema.statics.toAPI = (doc) => ({
   username: doc.username,
   _id: doc._id,
   admin:doc.admin,
+  itemsInCart: doc.itemsInCart,
 });
 
 

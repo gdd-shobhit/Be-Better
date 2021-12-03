@@ -1,29 +1,6 @@
 "use strict";
 
-var ItemInCart = function ItemInCart(props) {
-  var imageSource = "/retrieve?fileName=".concat(props.item.name);
-  return /*#__PURE__*/React.createElement("div", {
-    className: "cart-item-container"
-  }, /*#__PURE__*/React.createElement("img", {
-    src: imageSource
-  }), /*#__PURE__*/React.createElement("div", {
-    className: "about"
-  }, /*#__PURE__*/React.createElement("h1", {
-    className: "title"
-  }, props.item.name), /*#__PURE__*/React.createElement("h3", {
-    className: "subtitle"
-  }, "Qty: 1")), /*#__PURE__*/React.createElement("div", {
-    className: "prices"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "amount"
-  }, "$", props.item.price)));
-};
-
-var handleAddToCart = function handleAddToCart(item) {
-  ReactDOM.render( /*#__PURE__*/React.createElement(ItemInCart, {
-    item: item
-  }), document.querySelector("#CartItems"));
-};
+var cartItemsId = [];
 
 var ItemList = function ItemList(props) {
   if (props.items.length === 0) {
@@ -49,9 +26,12 @@ var ItemList = function ItemList(props) {
       className: "itemInfo"
     }, /*#__PURE__*/React.createElement("h2", null, item.name), /*#__PURE__*/React.createElement("h3", {
       className: "price"
-    }, "$", item.price)), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
+    }, "$", item.price)), /*#__PURE__*/React.createElement("div", {
+      "data-value": item._id,
+      csrf: props.csrf
+    }, /*#__PURE__*/React.createElement("button", {
       className: "item-button",
-      onClick: handleAddToCart
+      onClick: addToCart
     }, " Add To Cart ")));
   });
   return /*#__PURE__*/React.createElement("div", {
@@ -59,27 +39,54 @@ var ItemList = function ItemList(props) {
   }, itemNodes);
 };
 
-var loadItemsFromServer = function loadItemsFromServer() {
+var addToCart = function addToCart() {
+  cartItemsId.push(event.target.parentNode.getAttribute("data-value"));
+  sendAjax('POST', '/addToCart', {
+    cartItemsId: cartItemsId,
+    csrf: event.target.parentNode.getAttribute("csrf")
+  }, function (result) {
+    cartItemsId = result.itemsInCart;
+  });
+  document.querySelector("#cartButton").innerHTML = "Cart: ".concat(cartItemsId.length);
+};
+
+var loadItemsFromServer = function loadItemsFromServer(csrf) {
   sendAjax('GET', '/getItems', null, function (data) {
-    ReactDOM.render( /*#__PURE__*/React.createElement(ItemList, {
-      items: data.items
-    }), document.querySelector("#itemsDiv"));
+    ReactDOM.render( /*#__PURE__*/React.createElement(ShopPage, {
+      left: /*#__PURE__*/React.createElement(ItemList, {
+        items: data.items,
+        csrf: csrf
+      })
+    }), document.querySelector("#container"));
   });
   return false;
 };
 
+var ShopPage = function ShopPage(props) {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "shopWrapper"
+  }, props.left);
+};
+
 var setup = function setup(csrf) {
-  ReactDOM.render( /*#__PURE__*/React.createElement(ItemList, {
-    items: [],
-    csrf: csrf
-  }), document.querySelector("#itemsDiv"));
-  loadItemsFromServer();
+  ReactDOM.render( /*#__PURE__*/React.createElement(ShopPage, {
+    left: /*#__PURE__*/React.createElement(ItemList, {
+      items: [],
+      csrf: csrf
+    })
+  }), document.querySelector("#container"));
+  loadItemsFromServer(csrf);
+  document.querySelector("#cartButton").innerHTML = "Cart: ".concat(cartItemsId.length);
 };
 
 var getToken = function getToken() {
   sendAjax('GET', '/getToken', null, function (result) {
     console.log(result.csrfToken);
     setup(result.csrfToken);
+  });
+  sendAjax('GET', '/getCart', null, function (result) {
+    cartItemsId = result.itemsInCart;
+    document.querySelector("#cartButton").innerHTML = "Cart: ".concat(cartItemsId.length);
   });
 };
 
@@ -97,6 +104,15 @@ var redirect = function redirect(response) {
 };
 
 var sendAjax = function sendAjax(type, action, data, success) {
+  if (type == "POST") {
+    console.log(data);
+    $.ajaxSetup({
+      beforeSend: function beforeSend(xhr) {
+        xhr.setRequestHeader("X-CSRF-Token", data.csrf);
+      }
+    });
+  }
+
   $.ajax({
     cache: false,
     type: type,

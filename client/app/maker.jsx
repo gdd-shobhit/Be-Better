@@ -1,28 +1,4 @@
-const ItemInCart = function(props){
-
-    let imageSource = `/retrieve?fileName=${props.item.name}`;
-    return(
-        <div className="cart-item-container">
-            <img src={imageSource}>
-
-            </img>
-            <div className="about">
-                <h1 className="title">{props.item.name}</h1>
-                <h3 className="subtitle">Qty: 1</h3>
-            </div>
-            <div className="prices">
-                <div className="amount">${props.item.price}</div>
-            </div>
-        </div>
-    );
-};
-const handleAddToCart = (item) =>{
-    
-
-    ReactDOM.render(
-        <ItemInCart item={item} />,document.querySelector("#CartItems")
-    )
-} 
+let cartItemsId =[];
 
 const ItemList = function(props) {
     if(props.items.length === 0) {
@@ -44,8 +20,8 @@ const ItemList = function(props) {
                 <h2>{item.name}</h2>
                 <h3 className="price">${item.price}</h3>
                 </div>
-                <div>
-                <button className="item-button" onClick={handleAddToCart}> Add To Cart </button>
+                <div data-value={item._id} csrf={props.csrf}>
+                <button className="item-button" onClick={addToCart} > Add To Cart </button>
                 </div>
             </div>
         );
@@ -57,29 +33,58 @@ const ItemList = function(props) {
     );
 };
 
-const loadItemsFromServer = () =>{
+const addToCart = ()=>{
+    cartItemsId.push(event.target.parentNode.getAttribute("data-value"));
+
+    sendAjax('POST','/addToCart', {cartItemsId:cartItemsId, csrf:event.target.parentNode.getAttribute("csrf")}, (result)=>{
+        cartItemsId = result.itemsInCart;
+    })
+    document.querySelector("#cartButton").innerHTML = `Cart: ${cartItemsId.length}`;
+}
+
+const loadItemsFromServer = (csrf) =>{
     sendAjax('GET', '/getItems', null ,(data) => {
         ReactDOM.render(
-            <ItemList items={data.items} />,document.querySelector("#itemsDiv")
-        );
+            <ShopPage 
+                left={
+                    <ItemList items={data.items} csrf={csrf} />
+                }
+            /> ,document.querySelector("#container")
+        )
     });
 
     return false;
 };
 
-const setup = function(csrf) {
 
+const ShopPage = (props)=> {
+    return(
+        <div className="shopWrapper">
+            {props.left}
+        </div>
+    )
+};
+
+const setup = function(csrf) {
     ReactDOM.render(
-        <ItemList items={[]} csrf={csrf} />, document.querySelector("#itemsDiv")
-    );
-    
-    loadItemsFromServer();
+        <ShopPage 
+            left={
+                <ItemList items={[]} csrf={csrf} />
+            }
+        />,document.querySelector("#container")
+    )
+    loadItemsFromServer(csrf);
+    document.querySelector("#cartButton").innerHTML = `Cart: ${cartItemsId.length}`
 };
 
 const getToken = () => {
     sendAjax('GET', '/getToken', null, (result)=> {
         console.log(result.csrfToken);
         setup(result.csrfToken);
+    });
+    sendAjax('GET', '/getCart',null,(result)=>{
+        cartItemsId=result.itemsInCart;
+        document.querySelector("#cartButton").innerHTML = `Cart: ${cartItemsId.length}`;
     });
 };
 

@@ -1,6 +1,9 @@
 const models = require('../models');
 const crypto = require('crypto');
+const { isArguments, some } = require('underscore');
+const { AccountSchema } = require('../models/Account');
 const { Account } = models;
+const Item = models.Items;
 
 const loginPage = (req, res) => {
 
@@ -25,6 +28,7 @@ const logout = (req, res) => {
 };
 
 const login = (request, response) => {
+
   const req = request;
   const res = response;
 
@@ -72,6 +76,7 @@ const signup = (request, response) => {
       admin,
       salt,
       password: hash,
+      itemsInCart:[],
     };
 
     const newAccount = new Account.AccountModel(accountData);
@@ -106,6 +111,99 @@ const getToken = (request, response) => {
   res.json(csrfJSON);
 };
 
+const cartPage = (req,res) =>{
+  let loggedIn = false;
+    let admin = false;
+    if(req.session.account != null)
+    {
+      loggedIn = true;
+      if(req.session.account.admin)
+      {
+        admin = true;
+      }
+    }
+
+  return res.render('cart',{loggedIn:loggedIn,admin:admin});
+}
+
+const addToCart = (request,response)=> {
+  const req = request;
+  const res = response;
+
+  return Account.AccountModel.findByUsername(req.session.account.username,(err,doc)=>{
+    if(err)
+      console.log(err);
+
+    if(!doc)
+      return res.status(404).json({message:"User not found"});
+
+    let account = new Account.AccountModel;
+    account = doc;
+    
+    account.itemsInCart = req.body.cartItemsId;
+
+    const savePromise = account.save();
+
+        savePromise.then(()=>{
+          return res.status(201).json({ itemsInCart: account.itemsInCart });
+        });
+
+        savePromise.catch((err) => {
+          console.log(err);
+    
+          return res.status(400).json({ error: 'An error occurred' });
+        });
+  })
+}
+
+const getCart = async (request,response)=>{
+  
+  const req = request;
+  const res = response;
+  let items = [];
+
+  Account.AccountModel.findByUsername(req.session.account.username,async(err,doc)=>{
+    if(err)
+      console.log(err);
+    if(!doc)
+    return res.status(400).json({message:"Something went wrong"});
+
+    let loggedIn = false;
+    let admin = false;
+    if(req.session.account != null)
+    {
+      loggedIn = true;
+      if(req.session.account.admin)
+      {
+        admin = true;
+      }
+    }
+    for (const id of doc.itemsInCart)
+  {
+    let itemFound = items.find(x=> (x.id===id));
+    if(itemFound)
+    {
+      items[items.indexOf(itemFound)].qty++;
+    }
+    else{
+      await Item.ItemModel.findById(id,(err,itemDoc)=>{
+        if(err)
+          console.log(err);
+            let obj = {id:itemDoc[0].id,
+              name:itemDoc[0].name,
+              price:itemDoc[0].price,
+              qty:1};
+              items.push(obj); 
+                console.log(obj);
+      });
+    }
+  }
+  console.log("here");
+  return res.status(200).json( { itemsInCart: doc.itemsInCart, loggedIn:loggedIn, admin:admin, items:items});
+
+  });
+};
+
 const changePassword = (request,response) => {
 
   const req = request;
@@ -122,14 +220,7 @@ const changePassword = (request,response) => {
       console.log(err);
 
     if(!doc)
-      return res.status(404).json({message:"User now found"});
-
-    // const accountData = {
-    //   username:doc.username,
-    //   admin:doc.admin,
-    //   salt:doc.salt,
-    //   password: doc.password,
-    // };
+      return res.status(404).json({message:"User not found"});
 
     let account = new Account.AccountModel;
   const iterations = 10000;
@@ -165,9 +256,20 @@ const changePassword = (request,response) => {
   });  
 }
 
+const checkoutPage = (request, response) =>{
+  const req = request;
+  const res = response;
+
+  res.render('checkout');
+}
+
 module.exports.loginPage = loginPage;
 module.exports.login = login;
 module.exports.logout = logout;
 module.exports.signup = signup;
 module.exports.changePassword = changePassword;
 module.exports.getToken = getToken;
+module.exports.checkoutPage = checkoutPage;
+module.exports.getCart = getCart;
+module.exports.cartPage = cartPage;
+module.exports.addToCart = addToCart;
