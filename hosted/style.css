@@ -5,6 +5,7 @@ html, body {
     padding:0;
     color:#111;
     font-family: 'Raleway', sans-serif;
+    background: lightblue;
 }
 
 /* Media Queries: Tablet Landscape */
@@ -32,7 +33,7 @@ ul {
     flex-flow:row-reverse;
     display: flex;
     flex-direction: row;
-    position: absolute;
+    position: sticky;
   }
 
   li {
@@ -59,3 +60,48 @@ ul {
     cursor: pointer;
   }
 
+  .mainForm {
+    display: flex;
+    flex-direction: column;
+}
+
+.mainForm input{
+    flex: 1;
+  min-width: 40%;
+  margin: 10px 0;
+  padding: 10px;
+}
+
+.mainForm h3 {
+    text-align: center;
+}
+
+.mainForm label {
+    flex: 1;
+    width: 100px;
+    margin-right: 10px;
+    text-align: right;
+    font-size: 1.2em;
+}
+
+.generalButtons{
+  height: 60px;
+  background: #2364d2;
+  border: none;
+  border-radius: 5px;
+  font-size: 22px;
+  font-weight: 500;
+  font-family: "Source Sans Pro", sans-serif;
+  box-shadow: 3px 10px 20px 0px rgba(35, 100, 210, 0.3);
+  color: #fff;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+
+  #uploadWrapper{
+    margin:20px;
+    padding:20px;
+    background: white;
+  }

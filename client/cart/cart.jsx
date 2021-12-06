@@ -1,8 +1,8 @@
 let cartItemsId = [];
 let items = [];
+let totalPrice = 0;
 const ItemsInCart = function(props){
 
-    console.log(props.itemsInCart);
     if(props.itemsInCart.length === 0) {
         return (
             <div className="cartItemList">
@@ -11,6 +11,7 @@ const ItemsInCart = function(props){
         );
     }
     const cartItemNodes = items.map(function(item) {
+        totalPrice += (item.price*item.qty);
         let imageSource = `/retrieve?fileName=${item.name}`;
         return(
             <div key={item._id} className="cart-item-container">
@@ -33,49 +34,80 @@ const ItemsInCart = function(props){
     )  
 };
 
+const emptyCart = () =>{
+
+    let csrf = event.target.parentNode.getAttribute("csrf");
+    sendAjax('POST','/addToCart', {cartItemsId:[], csrf:event.target.parentNode.getAttribute("csrf")}, (result)=>{
+        cartItemsId = [];
+        totalPrice=0;
+        document.querySelector("#cartButton").innerHTML = `Cart: ${cartItemsId.length}`;
+        ReactDOM.render(
+            <CartPage 
+                right={
+                    <ItemsInCart itemsInCart={[]} csrf={csrf} />
+                }
+            />,document.querySelector("#container")
+        )
+    })
+   
+}
+
+const CheckoutPage = (props) =>{
+    return(
+        <div csrf={props.csrf}>
+            <h5 className="Action" onClick={setupCartPage}>Go back to Cart</h5>
+        </div>
+    )
+}
+
+const CreateCheckoutPage = () =>{
+    let csrf = event.target.parentNode.getAttribute("csrf");
+    ReactDOM.render(
+        <CheckoutPage csrf={csrf} />, document.querySelector("#container")
+    )
+}
+    
 const CartPage = (props)=> {
     return(
             <div className="CheckoutPanel">
                 <div className="headings">
                     <div className="Header">
                         <h3 className="Heading">Shopping Cart</h3>
-                        <h5 className="Action">Remove all</h5>
+                        <div csrf={props.right.props.csrf}>
+                        <h5 className="Action" onClick={emptyCart}>Remove all</h5>
+                        </div>
                     </div>
                     {props.right}
+                </div>
+                <div className="footerCart" csrf={props.right.props.csrf}>
+                <a href="/checkoutPage"><button className="checkoutButton">Checkout</button></a>
+                <h2>Total: ${totalPrice}</h2>
                 </div>
             </div>
     )
 }
 
-const loadCart = () =>{
-    sendAjax('GET', '/getItems', null ,(data) => {
-    })
-}
-
-const setupCartPage = function(csrf) {
-    getCart(csrf);
-    ReactDOM.render(
-        <CartPage 
-            right={
-                <ItemsInCart itemsInCart={[]} csrf={csrf} />
-            }
-        />,document.querySelector("#container")
-    )
-
-};
+const setupCartPage = function() {
+    
+    let csrf = event.target.parentNode.getAttribute("csrf");
+        getCart(csrf);
+    };
 
 const getToken = () => {
     sendAjax('GET', '/getToken', null, (result)=> {
-        setupCartPage(result.csrfToken);
+        getCart(result.csrfToken);
     }); 
-
-    console.log(cartItemsId);
 };
 
 const getCart = (csrf) =>{
     sendAjax('GET', '/getCart',null,(result)=>{
         cartItemsId=result.itemsInCart;
         items = result.items;
+        totalPrice = 0;
+        for(const item of items)
+        {
+            totalPrice +=(item.price*item.qty);
+        }
         document.querySelector("#cartButton").innerHTML = `Cart: ${cartItemsId.length}`;
 
         ReactDOM.render(
@@ -86,13 +118,7 @@ const getCart = (csrf) =>{
             />,document.querySelector("#container")
         )
     });
-
-
 };
-
-let promise = new Promise((resolve,reject)=>{
-    setTimeout(()=> resolve(),1000);
-})
 
 $(document).ready(function() {
    getToken();

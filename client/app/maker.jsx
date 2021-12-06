@@ -79,7 +79,6 @@ const setup = function(csrf) {
 
 const getToken = () => {
     sendAjax('GET', '/getToken', null, (result)=> {
-        console.log(result.csrfToken);
         setup(result.csrfToken);
         sendAjax('GET', '/getCart',null,(result)=>{
             cartItemsId=result.itemsInCart;

@@ -81,7 +81,6 @@ var setup = function setup(csrf) {
 
 var getToken = function getToken() {
   sendAjax('GET', '/getToken', null, function (result) {
-    console.log(result.csrfToken);
     setup(result.csrfToken);
     sendAjax('GET', '/getCart', null, function (result) {
       cartItemsId = result.itemsInCart;
@@ -105,7 +104,6 @@ var redirect = function redirect(response) {
 
 var sendAjax = function sendAjax(type, action, data, success) {
   if (type == "POST") {
-    console.log(data);
     $.ajaxSetup({
       beforeSend: function beforeSend(xhr) {
         xhr.setRequestHeader("X-CSRF-Token", data.csrf);

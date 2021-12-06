@@ -1,32 +1,28 @@
-const models = require('../models');
 const crypto = require('crypto');
+const models = require('../models');
+
 const { Account } = models;
 const Item = models.Items;
 
 const loginPage = (req, res) => {
-
   let loggedIn = false;
   let admin = false;
-  if(req.session.account != null)
-  {
+  if (req.session.account != null) {
     loggedIn = true;
-    if(req.session.account.admin)
-    {
+    if (req.session.account.admin) {
       admin = true;
     }
   }
 
-  res.render('login', { csrfToken: req.csrfToken(), loggedIn:loggedIn,admin:admin});
+  res.render('login', { csrfToken: req.csrfToken(), loggedIn, admin });
 };
 
 const logout = (req, res) => {
-
   req.session.destroy();
-  res.redirect('/',200,{loggedIn:false,admin:false});
+  res.redirect('/', 200, { loggedIn: false, admin: false });
 };
 
 const login = (request, response) => {
-
   const req = request;
   const res = response;
 
@@ -74,7 +70,7 @@ const signup = (request, response) => {
       admin,
       salt,
       password: hash,
-      itemsInCart:[],
+      itemsInCart: [],
     };
 
     const newAccount = new Account.AccountModel(accountData);
@@ -109,182 +105,158 @@ const getToken = (request, response) => {
   res.json(csrfJSON);
 };
 
-const cartPage = (req,res) =>{
+const cartPage = (req, res) => {
   let loggedIn = false;
-    let admin = false;
-    if(req.session.account != null)
-    {
-      loggedIn = true;
-      if(req.session.account.admin)
-      {
-        admin = true;
-      }
+  let admin = false;
+  if (req.session.account != null) {
+    loggedIn = true;
+    if (req.session.account.admin) {
+      admin = true;
     }
+  }
+  return res.render('cart', { loggedIn, admin });
+};
 
-  return res.render('cart',{loggedIn:loggedIn,admin:admin});
-}
-
-const addToCart = (request,response)=> {
+const addToCart = (request, response) => {
   const req = request;
   const res = response;
 
-  return Account.AccountModel.findByUsername(req.session.account.username,(err,doc)=>{
-    if(err)
-      console.log(err);
+  return Account.AccountModel.findByUsername(req.session.account.username, (err, doc) => {
+    if (err) console.log(err);
 
-    if(!doc)
-      return res.status(404).json({message:"User not found"});
+    if (!doc) return res.status(404).json({ message: 'User not found' });
 
-    let account = new Account.AccountModel;
+    let account = new Account.AccountModel();
     account = doc;
-    
-    account.itemsInCart = req.body.cartItemsId;
+    if (req.body.cartItemsId) account.itemsInCart = req.body.cartItemsId;
+    else account.itemsInCart = [];
 
     const savePromise = account.save();
 
-        savePromise.then(()=>{
-          return res.status(201).json({ itemsInCart: account.itemsInCart });
-        });
+    savePromise.then(() => res.status(201).json({ itemsInCart: account.itemsInCart }));
 
-        savePromise.catch((err) => {
-          console.log(err);
-    
-          return res.status(400).json({ error: 'An error occurred' });
-        });
-  })
-}
+    savePromise.catch((er) => {
+      console.log(er);
 
-const getCart = async (request,response)=>{
-  
+      return res.status(400).json({ error: 'An error occurred' });
+    });
+
+    return false;
+  });
+};
+
+const getCart = async (request, response) => {
   const req = request;
   const res = response;
-  let items = [];
+  const items = [];
 
-  Account.AccountModel.findByUsername(req.session.account.username,async(err,doc)=>{
-    if(err)
-      console.log(err);
-    if(!doc)
-    return res.status(400).json({message:"Something went wrong"});
+  Account.AccountModel.findByUsername(req.session.account.username, async (err, doc) => {
+    if (err) console.log(err);
+    if (!doc) return res.status(400).json({ message: 'Something went wrong' });
 
     let loggedIn = false;
     let admin = false;
-    if(req.session.account != null)
-    {
+    if (req.session.account != null) {
       loggedIn = true;
-      if(req.session.account.admin)
-      {
+      if (req.session.account.admin) {
         admin = true;
       }
     }
 
     for (const _id of doc.itemsInCart) {
-
-      if(items.length ==0)
-      {
-        let item = await Item.ItemModel.findOne({_id}).select('id name price').lean();
-        let obj = {
-        _id: item._id,
-        name: item.name,
-        price: item.price,
-        qty:1
-        }
-        items.push(obj); 
-        console.log(items);
-      }
-      else{
-        let found = false;
-        for(const obj of items)
-        {
-
-          let something =Item.ItemModel;
-          something._id = _id;
-          console.log(something._id);
-          if(obj._id === something._id)
-          {
-            console.log("here");
-            obj.qty++;
-            found = true;
-            break;
-          }
-        }
-        if(!found)
-        {
-          let item = await Item.ItemModel.findOne({_id}).select('id name price').lean();
-          let obj = {
+      if (items.length === 0) {
+        const item = await Item.ItemModel.findOne({ _id }).select('id name price').lean();
+        const obj = {
           _id: item._id,
           name: item.name,
           price: item.price,
-          qty:1
+          qty: 1,
+        };
+        items.push(obj);
+      } else {
+        let found = false;
+        for (const obj of items) {
+          if (String(obj._id) === String(_id)) {
+            console.log();
+            obj.qty++;
+            found = true;
           }
-          items.push(obj); 
         }
 
+        if (!found) {
+          const item = await Item.ItemModel.findOne({ _id }).select('id name price').lean();
+          const obj = {
+            _id: item._id,
+            name: item.name,
+            price: item.price,
+            qty: 1,
+          };
+          items.push(obj);
+        } else {
+          found = false;
+        }
       }
     }
-    console.log("here");
-  return res.status(200).json( { itemsInCart: doc.itemsInCart, loggedIn:loggedIn, admin:admin, items:items});
-
+    return res.status(200).json({
+      itemsInCart: doc.itemsInCart, loggedIn, admin, items,
+    });
   });
 };
 
-const changePassword = (request,response) => {
-
+const changePassword = (request, response) => {
   const req = request;
   const res = response;
 
   const user = `${req.body.user}`;
   const oldPassword = `${req.body.oldPass}`;
   const newPassword = `${req.body.newPass}`;
-  const newPassword2  = `${req.body.newPass2}`;
+  const newPassword2 = `${req.body.newPass2}`;
 
-  Account.AccountModel.findByUsername(user,(err,doc)=>{
+  Account.AccountModel.findByUsername(user, (err, doc) => {
+    if (err) console.log(err);
 
-    if(err)
-      console.log(err);
+    if (!doc) return res.status(404).json({ message: 'User not found' });
 
-    if(!doc)
-      return res.status(404).json({message:"User not found"});
+    let account = new Account.AccountModel();
+    const iterations = 10000;
+    const keyLength = 64;
 
-    let account = new Account.AccountModel;
-  const iterations = 10000;
-  const keyLength = 64;
+    crypto.pbkdf2(oldPassword, doc.salt, iterations, keyLength, 'RSA-SHA512', (error, hash) => {
+      if (error) console.log(error);
 
-    crypto.pbkdf2(oldPassword, doc.salt, iterations, keyLength, 'RSA-SHA512', (err, hash) => {
       if (hash.toString('hex') !== doc.password) {
-        return res.status(401).json({message:"old password not match"});
+        return res.status(401).json({ message: 'old password not match' });
       }
-      
-      if(newPassword != newPassword2)
-        return res.status(401).json({message:"password not match"});
 
-      return Account.AccountModel.generateHash(newPassword, (salt, hash) => {
-      
+      if (newPassword !== newPassword2) return res.status(401).json({ message: 'password not match' });
+
+      return Account.AccountModel.generateHash(newPassword, (salt, passHash) => {
         account = doc;
-        account.password = hash;
+        account.password = passHash;
         account.salt = salt;
 
         const savePromise = account.save();
 
-        savePromise.then(()=>{
-          return res.status(201).json({ redirect: '/login' });
-        });
+        savePromise.then(() => res.status(201).json({ redirect: '/login' }));
 
-        savePromise.catch((err) => {
-          console.log(err);
-    
+        savePromise.catch((er) => {
+          console.log(er);
+
           return res.status(400).json({ error: 'An error occurred' });
         });
-      })
+        return savePromise;
+      });
     });
-  });  
-}
+    return false;
+  });
+};
 
-const checkoutPage = (request, response) =>{
+const checkoutPage = (request, response) => {
   const req = request;
   const res = response;
 
-  res.render('checkout');
-}
+  res.render('checkout', { csrfToken: req.csrfToken(), loggedIn: true });
+};
 
 module.exports.loginPage = loginPage;
 module.exports.login = login;

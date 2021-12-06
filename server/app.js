@@ -12,8 +12,6 @@ const url = require('url');
 const csrf = require('csurf');
 const redis = require('redis');
 const fileUpload = require('express-fileupload');
-const {IMask} = require('react-imask');
-
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 

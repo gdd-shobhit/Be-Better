@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 const _ = require('underscore');
+
 let ItemModel = {};
 
 // const convertId = mongoose.Types.ObjectId;
@@ -68,9 +69,9 @@ ItemSchema.statics.toAPI = (doc) => ({
   image: doc.image,
 });
 
-ItemSchema.statics.deleteByName = (itemName,callback) => {
+ItemSchema.statics.deleteByName = (itemName, callback) => {
   const toDelete = {
-    name:itemName,
+    name: itemName,
   };
 
   return ItemModel.deleteOne(toDelete).exec(callback);
@@ -94,13 +95,13 @@ ItemSchema.statics.findByName = (name, callback) => {
   return ItemModel.find(search).select('name price tags image').lean().exec(callback);
 };
 
-ItemSchema.statics.findById = async (objectId,callback) => {
+ItemSchema.statics.findById = async (objectId, callback) => {
   const search = {
-    _id:objectId,
+    _id: objectId,
   };
 
   return ItemModel.findOne(search).select('name price').exec(callback);
-}
+};
 
 ItemModel = mongoose.model('Items', ItemSchema);
 

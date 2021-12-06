@@ -1,5 +1,6 @@
 const crypto = require('crypto');
 const mongoose = require('mongoose');
+
 mongoose.Promise = global.Promise;
 
 let AccountModel = {};
@@ -30,11 +31,11 @@ const AccountSchema = new mongoose.Schema({
   },
 
   itemsInCart: {
-  type: [mongoose.Schema.Types.ObjectId],
-  required:true,
-  ref:'Items'
+    type: [mongoose.Schema.Types.ObjectId],
+    required: true,
+    ref: 'Items',
   },
-  
+
   createdDate: {
     type: Date,
     default: Date.now,
@@ -45,10 +46,9 @@ AccountSchema.statics.toAPI = (doc) => ({
   // _id is built into your mongo document and is guaranteed to be unique
   username: doc.username,
   _id: doc._id,
-  admin:doc.admin,
+  admin: doc.admin,
   itemsInCart: doc.itemsInCart,
 });
-
 
 const validatePassword = (doc, password, callback) => {
   const pass = doc.password;
@@ -99,4 +99,3 @@ AccountModel = mongoose.model('Account', AccountSchema);
 
 module.exports.AccountModel = AccountModel;
 module.exports.AccountSchema = AccountSchema;
-

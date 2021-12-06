@@ -2,8 +2,6 @@ const models = require('../models');
 
 const Item = models.Items;
 
-
-
 const uploadPage = (req, res) => {
   Item.ItemModel.findAll((err, docs) => {
     if (err) {
@@ -12,15 +10,15 @@ const uploadPage = (req, res) => {
     }
     let loggedIn = false;
     let admin = false;
-    if(req.session.account != null)
-    {
+    if (req.session.account != null) {
       loggedIn = true;
-      if(req.session.account.admin)
-      {
+      if (req.session.account.admin) {
         admin = true;
       }
     }
-    return res.render('itemUpload', { csrfToken: req.csrfToken(), items: docs, loggedIn:loggedIn, admin:admin} );
+    return res.render('itemUpload', {
+      csrfToken: req.csrfToken(), items: docs, loggedIn, admin,
+    });
   });
 };
 
@@ -30,29 +28,27 @@ const merchPage = (req, res) => {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
     }
-    
+
     // console.log(req.session.account);
 
     let loggedIn = false;
     let admin = false;
-    if(req.session.account != null)
-    {
+    if (req.session.account != null) {
       loggedIn = true;
-      if(req.session.account.admin)
-      {
+      if (req.session.account.admin) {
         admin = true;
       }
     }
 
-    return res.render('shop', { csrfToken: req.csrfToken(), items: docs, loggedIn:loggedIn, admin:admin});
+    return res.render('shop', {
+      csrfToken: req.csrfToken(), items: docs, loggedIn, admin,
+    });
   });
 };
 
 // Our upload handler.
 const uploadFile = (req, res) => {
-
-  if(!req.session.account.admin)
-   return res.status(404).json({message:"You are not an admin"});
+  if (!req.session.account.admin) return res.status(404).json({ message: 'You are not an admin' });
 
   if (!req.files || Object.keys(req.files).length === 0) {
     return res.status(400).json({ error: 'No files were uploaded' });
@@ -82,16 +78,14 @@ const uploadFile = (req, res) => {
 
   // The promises 'then' event is called if the document is successfully stored in
   // the database. If that is the case, we will send a success message to the user.
-  savePromise.then(() => {
-    return res.json({ redirect: '/shop' }); 
-  });
+  savePromise.then(() => merchPage(req, res));
 
   // The promises 'catch' event is called if there is an error when adding the document
   // to the database. If that is the case, we want to log the error and send a 400 status
   // back to the user.
   savePromise.catch((error) => {
     console.dir(error);
-    res.status(400).json({ error: 'Something went wrong uploading' });
+    return res.status(400).json({ error: 'Something went wrong uploading' });
   });
 
   // Finally we will return the savePromise to prevent eslint errors.
@@ -123,29 +117,23 @@ const retrieveFile = (req, res) => {
   });
 };
 
-const deleteItem = (request,response) => {
+const deleteItem = (request, response) => {
   const req = request;
   const res = response;
 
-  return Item.ItemModel.deleteByName(req.body.fileName,(err,docs)=>{
-    if(err)
-    {
+  return Item.ItemModel.deleteByName(req.body.fileName, (err, docs) => {
+    if (err) {
       console.log(err);
-      return res.status(400).json({error:'An error occurred'});
+      return res.status(400).json({ error: 'An error occurred' });
     }
 
-    console.log("here");
-    if(!docs)
-    {
-      
-      return res.status(404).json({error:'Item not found',redirect:'/shop'});
+    if (!docs) {
+      return res.status(404).json({ error: 'Item not found' });
     }
 
-    return res.json({deletedItem: docs, redirect:'shop'})
+    return res.json({ deletedItem: docs });
   });
-
-
-}
+};
 
 const getItems = (request, response) => {
   const res = response;

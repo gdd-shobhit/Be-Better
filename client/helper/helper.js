@@ -10,7 +10,6 @@ const sendAjax = (type, action, data, success) => {
 
     if(type=="POST")
     {
-        console.log(data);
         $.ajaxSetup({
             beforeSend: function(xhr) {
                 xhr.setRequestHeader("X-CSRF-Token", data.csrf);         

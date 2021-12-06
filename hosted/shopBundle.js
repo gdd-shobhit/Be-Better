@@ -1,20 +1,8 @@
 "use strict";
 
-var _this = void 0;
-
-function _readOnlyError(name) { throw new TypeError("\"" + name + "\" is read-only"); }
-
-var handleUpload = function handleUpload(e) {
-  e.preventDefault();
-  sendAjax('POST', $("#uploadForm").attr("action"), $("#uploadForm").serialize(), function () {});
-  return false;
-};
-
 var handleDeleteItem = function handleDeleteItem(e) {
   e.preventDefault();
-  sendAjax('DELETE', $("#deleteForm").attr("action"), $("#deleteForm").serialize(), function () {
-    console.log("here");
-  });
+  sendAjax('DELETE', $("#deleteForm").attr("action"), $("#deleteForm").serialize(), function () {});
   return false;
 };
 
@@ -23,79 +11,27 @@ var DeleteItemForm = function DeleteItemForm(props) {
     id: "deleteForm",
     onSubmit: handleDeleteItem,
     action: "/deleteItem",
+    className: "mainForm",
     method: "DELETE"
   }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "fileName"
   }, "Delete Product By Name: "), /*#__PURE__*/React.createElement("input", {
     name: "fileName",
-    type: "text"
+    type: "text",
+    required: true
   }), /*#__PURE__*/React.createElement("input", {
     type: "hidden",
     name: "_csrf",
     value: props.csrf
   }), /*#__PURE__*/React.createElement("input", {
+    className: "generalButtons",
     type: "submit",
     value: "Delete!"
   }));
 };
 
-var state = {
-  // Initially, no file is selected
-  selectedFile: null
-}; // On file select (from the pop up)
-
-(function (event) {
-  // Update the state
-  _this.setState({
-    selectedFile: event.target.files[0]
-  });
-}), _readOnlyError("onFileChange");
-
-var onFileChange = function onFileChange(e) {
-  e.preventDefault();
-};
-
-var UploadItemForm = function UploadItemForm(props) {
-  return /*#__PURE__*/React.createElement("form", {
-    id: "uploadForm",
-    onSubmit: handleUpload,
-    action: "/upload",
-    method: "POST",
-    encType: "multipart/form-data"
-  }, /*#__PURE__*/React.createElement("label", {
-    htmlFor: "productName"
-  }, "Product Name: "), /*#__PURE__*/React.createElement("input", {
-    id: "productName",
-    type: "text",
-    name: "productName",
-    placeholder: "Product Name"
-  }), /*#__PURE__*/React.createElement("label", {
-    htmlFor: "price"
-  }, "Price: "), /*#__PURE__*/React.createElement("input", {
-    id: "price",
-    type: "text",
-    name: "price",
-    placeholder: "Price"
-  }), /*#__PURE__*/React.createElement("label", {
-    htmlFor: "sampleFile"
-  }, "Product Image"), /*#__PURE__*/React.createElement("input", {
-    type: "file",
-    onChange: onFileChange,
-    name: "sampleFile"
-  }), /*#__PURE__*/React.createElement("input", {
-    type: "hidden",
-    name: "_csrf",
-    value: props.csrf
-  }), /*#__PURE__*/React.createElement("input", {
-    type: "submit",
-    value: "Upload!"
-  }));
-};
-
 var setupItemUpload = function setupItemUpload(csrf) {
-  ReactDOM.render( /*#__PURE__*/React.createElement(UploadItemForm, {
-    csrf: csrf
-  }), document.querySelector("#uploadFormSection"));
+  console.log(csrf);
   ReactDOM.render( /*#__PURE__*/React.createElement(DeleteItemForm, {
     csrf: csrf
   }), document.querySelector("#deleteFormSection"));
@@ -103,8 +39,8 @@ var setupItemUpload = function setupItemUpload(csrf) {
 
 var getToken = function getToken() {
   sendAjax('GET', '/getToken', null, function (result) {
-    console.log(result.csrfToken);
     setupItemUpload(result.csrfToken);
+    document.querySelector("#csrf").value = result.csrfToken;
   });
 };
 
@@ -123,7 +59,6 @@ var redirect = function redirect(response) {
 
 var sendAjax = function sendAjax(type, action, data, success) {
   if (type == "POST") {
-    console.log(data);
     $.ajaxSetup({
       beforeSend: function beforeSend(xhr) {
         xhr.setRequestHeader("X-CSRF-Token", data.csrf);

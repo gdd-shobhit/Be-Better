@@ -8,18 +8,36 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.6.2/remarkable.min.js"></script>
   <link rel="shortcut icon" href="/assets/img/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
   </head>
     
   <body>
     <html>
   <body>
+      <div id="container">
+        <div id="uploadWrapper">
       <section id="uploadFormSection"> 
-
+                <form 
+      id='uploadForm'
+      action='/upload' 
+      method='POST'
+      class="mainForm" 
+      encType="multipart/form-data">
+        <label for="name">Product Name: </label>
+        <input id="productName" type="text" name="name" placeholder="Product Name"/>
+        <label for="price">Price: </label>
+        <input id="price" type="text" name="price" placeholder="Price"/>
+        <input type="file" for="sampleFile" name="sampleFile" />
+        <input type="hidden" id="csrf" name="_csrf" value=""/>
+        <input class="generalButtons" type='submit' value='Upload!' />
+    </form> 
       </section>
 
       <section id="deleteFormSection"> 
         
       </section>
+      </div>
+      </div>
       <script src="/assets/shopBundle.js"></script>
   </body>
 </html>

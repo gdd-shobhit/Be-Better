@@ -1,49 +1,54 @@
 .CheckoutPanel{
-    display: flex;
     flex-direction: row;
-    flex:1;
+    flex:2;
     background-color: white;
+    margin:20px;
+    padding: 20px;;
     border-radius: 20px;
     box-shadow: 0px 25px 40px #1687d933;
     
    }
 
+   .CartItemList{
+       display: flex;
+       flex-direction: row;
+   }
+
    .cart-item-container{
-    width:15%;
-    height: auto;
+       display: flex;
+       flex-direction: row;
+    height: 80%;
     text-align: center;
+    margin: 20px;
+    padding: 10px;
    }
 
    .cart-item-container img{
-    max-width: 100%;
+    width: 50%;
    }
 
-   
-   .CartItems{
-    display: flex;
-    flex-direction: row;
-    flex:1;
-}
-
-.image-box{
-    width: 15%;
-    text-align: center;
-   }
    .about{
     height: 100%;
+    flex:1;
+    display: flex;
+    flex-direction: row;
+    width:600px;
+    height: 100px;
    }
    .title{
     padding-top: 5px;
     line-height: 10px;
-    font-size: 32px;
+    font-size: 15px;
     font-weight: 800;
     color: #202020;
+    flex:2;
    }
    .subtitle{
     line-height: 10px;
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 600;
     color: #909090;
+    flex:2;
    }
 
    .Header{
@@ -70,5 +75,46 @@
    
 .price {
     color: grey;
+    flex: 3;
+    flex-flow: row-reverse;
   }
+
+  .prices{
+      justify-items: right;
+  }
+
+  .footerCart{
+      display: flex;
+      flex-flow: row;
+      justify-content: right;
+      align-items:stretch;
+    margin-left: 80%;
+      padding: 100px;
+      grid-gap: 40px;
+  }
+
+  h2{
+      flex: 1;
+  }
+
+  .checkOutButton{
+    height: 60px;
+    background: #2364d2;
+    border: none;
+    border-radius: 5px;
+    font-size: 22px;
+    font-weight: 500;
+    font-family: "Source Sans Pro", sans-serif;
+    box-shadow: 3px 10px 20px 0px rgba(35, 100, 210, 0.3);
+    color: #fff;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+      
+  }
+
+  .checkOutButton:hover{
+    background: lightseagreen;
+    color: white;
+}
   
