@@ -6,7 +6,6 @@ const router = (app) => {
   app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
   app.post('/changePassword', mid.requiresSecure, controllers.Account.changePassword);
-  app.get('/changePassword', mid.requiresSecure, mid.requiresLogin, controllers.Account.loginPage);
   app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
   app.get('/logout', mid.requiresSecure, mid.requiresLogin, controllers.Account.logout);
   app.get('/shop', mid.requiresSecure, mid.requiresLogin, controllers.Items.merchPage);
