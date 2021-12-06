@@ -21,7 +21,6 @@ const router = (app) => {
   // app.get('/deleteItem',mid.requiresSecure,mid.requiresLogin,controllers.Items.merchPage);
   // Setup get requests to the root for the index page.
   app.get('/uploadPage', controllers.Items.uploadPage);
-  app.get('/checkout', mid.requiresSecure, mid.requiresLogin, controllers.Account.checkoutPage);
   app.get('/checkoutPage', mid.requiresSecure, mid.requiresLogin, controllers.Account.checkoutPage);
 
   app.post('/addToCart', mid.requiresSecure, mid.requiresLogin, controllers.Account.addToCart);
