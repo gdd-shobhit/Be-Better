@@ -31,7 +31,6 @@ var DeleteItemForm = function DeleteItemForm(props) {
 };
 
 var setupItemUpload = function setupItemUpload(csrf) {
-  console.log(csrf);
   ReactDOM.render( /*#__PURE__*/React.createElement(DeleteItemForm, {
     csrf: csrf
   }), document.querySelector("#deleteFormSection"));
